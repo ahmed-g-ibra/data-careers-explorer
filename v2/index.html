@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Data Analyst vs Data Engineer vs Data Scientist (+ DevOps paths)</title>
+<title>Data Analyst vs Data Engineer vs Data Scientist (+ DevOps & unified path)</title>
 <style>
   :root {
     --bg: #0f1220; --panel: #171b2e; --panel2: #1f2440; --text: #e8eaf6; --muted: #9aa0c3;
@@ -216,6 +216,35 @@
   .dp-cols ul { margin: 6px 0 0; padding-inline-start: 18px; padding-left: 18px; }
   [dir=rtl] .dp-cols ul { padding-left: 0; padding-right: 18px; }
 
+  /* Unified path */
+  section#unified h3 { margin-top: 30px; }
+  .up-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+  .up-why { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 4px; }
+  .up-why span { font-size: 1.6rem; } .up-why small { color: var(--muted); font-size: .86rem; }
+  .up-covs { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .up-cov { background: var(--panel); border: 1px solid var(--line); border-top: 4px solid var(--c); border-radius: 12px; padding: 14px; cursor: pointer; }
+  .up-cov-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .up-cov-top b { font-size: 1.4rem; color: var(--c); } .up-cov-top small { font-size: .75rem; color: var(--muted); font-weight: 400; }
+  .up-cov .fp-meter div { transition: width 1s ease; }
+  .up-left { display: none; } .up-cov.open .up-left { display: block; }
+  .up-tag { display: inline-block; background: #8b93d6; color: #111; font-weight: 700; font-size: .78rem; letter-spacing: .06em; padding: 4px 12px; border-radius: 8px; margin-bottom: 10px; }
+  .up-phases { display: flex; flex-direction: column; }
+  .up-phase { background: var(--panel); border: 1px solid var(--line); border-inline-start: 5px solid #8b93d6; border-radius: 14px; padding: 16px; }
+  .up-goal { margin: 6px 0 0; font-size: .92rem; }
+  .up-list { margin: 4px 0; padding-inline-start: 20px; font-size: .88rem; }
+  .up-arrow { text-align: center; color: var(--muted); font-size: 1.4rem; margin: 6px 0; }
+  .up-checkpoint { background: linear-gradient(135deg, #1f2440, #262c55); border: 1px solid #4a5290; border-radius: 16px; padding: 18px; }
+  .up-chk { border-inline-start: 4px solid var(--c); }
+  .up-chk.sel { background: #2b3160; border-color: var(--c); }
+  .up-branch { background: var(--panel); border: 2px solid var(--c); border-radius: 16px; padding: 18px; }
+  .up-c { padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: .88rem; } .up-c small { color: var(--muted); }
+  .up-time { display: flex; height: 30px; border-radius: 8px; overflow: hidden; background: var(--panel2); margin-top: 8px; }
+  .up-time span { display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 700; }
+  .pair label { margin-inline-end: 8px; }
+  .sw-out { margin-top: 12px; color: var(--muted); }
+  .up-week { display: flex; gap: 4px; border-radius: 10px; overflow: hidden; }
+  .up-week span { padding: 10px; color: #111; font-size: .82rem; text-align: center; }
+
   /* Language toggle & RTL */
   header { position: relative; }
   .langbtn { position: absolute; top: 14px; right: 16px; background: var(--panel2); color: var(--text); border: 1px solid #4a5290; padding: 7px 14px; border-radius: 999px; cursor: pointer; font-size: .9rem; }
@@ -381,6 +410,36 @@
     <p style="color:var(--muted);font-size:.82rem" id="lpNote"></p>
   </section>
 
+  <!-- UNIFIED PATH -->
+  <section id="unified">
+    <h2 id="upTitle"></h2>
+    <p class="sub" id="upSub"></p>
+    <h3 id="upWhyH"></h3>
+    <div class="up-grid" id="upWhy"></div>
+    <h3 id="upCovH"></h3>
+    <p class="sub" id="upCovSub"></p>
+    <div class="up-covs" id="upCov"></div>
+    <h3 id="upRoadH"></h3>
+    <p class="sub" id="upRoadSub"></p>
+    <div id="upCore"></div>
+    <div class="up-arrow">⬇</div>
+    <div class="up-checkpoint">
+      <h3 id="upChkH" style="margin-top:0"></h3>
+      <p class="sub" id="upChkSub"></p>
+      <div id="upChk"></div>
+    </div>
+    <div class="up-arrow">⬇</div>
+    <div id="upBranch"></div>
+    <h3 id="upSwitchH"></h3>
+    <p class="sub" id="upSwitchSub"></p>
+    <div class="pair" id="upSwitch"></div>
+    <h3 id="upHabitsH"></h3>
+    <div class="up-grid" id="upHabits"></div>
+    <h3 id="upWeekH"></h3>
+    <div class="up-week" id="upWeek"></div>
+    <p style="color:var(--muted);font-size:.82rem" id="upNote"></p>
+  </section>
+
   <!-- MYTHS -->
   <section id="myths">
     <h2>Myths vs reality</h2>
@@ -480,7 +539,7 @@ window.AR = {
 
   SECTIONS: [["overview","نظرة عامة"],["pipeline","دورة البيانات"],["compare","مقارنة شاملة"],["skills","المهارات"],
     ["tools","الأدوات"],["day","يوم في الحياة"],["scenario","نفس المشكلة"],["career","المسار والأجر"],
-    ["ai","🤖 أثر الذكاء الاصطناعي"],["paths","🎓 مسارات التعلّم"],["myths","خرافات"],["quiz","أيّها يناسبني؟"]],
+    ["ai","🤖 أثر الذكاء الاصطناعي"],["paths","🎓 مسارات التعلّم"],["unified","🧩 المسار الموحّد"],["myths","خرافات"],["quiz","أيّها يناسبني؟"]],
 
   ANALOGY: {
     de: "<b>بنّاء المطبخ وسلسلة التوريد.</b> يوفّر المكوّنات، ويبني المطبخ والتمديدات والثلاجات حتى يصل كل شيء طازجًا وفي وقته.",
@@ -690,7 +749,7 @@ if (AR_ON) KEYS.forEach(k => Object.assign(ROLES[k], AR.ROLES[k]));
 const SECTIONS = AR_ON ? AR.SECTIONS : [
   ["overview","Overview"],["pipeline","Lifecycle"],["compare","Compare all"],["skills","Skills"],
   ["tools","Tools"],["day","Day in life"],["scenario","Same problem"],["career","Career & pay"],
-  ["ai","🤖 AI impact"],["paths","🎓 Learning paths"],["myths","Myths"],["quiz","Which fits me?"]
+  ["ai","🤖 AI impact"],["paths","🎓 Learning paths"],["unified","🧩 Unified path"],["myths","Myths"],["quiz","Which fits me?"]
 ];
 const nav = document.getElementById("nav");
 SECTIONS.forEach(([id, label], i) => {
@@ -702,6 +761,7 @@ SECTIONS.forEach(([id, label], i) => {
     b.classList.add("active"); document.getElementById(id).classList.add("active");
     if (id === "skills") drawSkills();
     if (id === "ai") animateAI();
+    if (id === "unified") animateUP();
     window.scrollTo({ top: document.querySelector("nav").offsetTop, behavior: "smooth" });
   };
   nav.appendChild(b);
@@ -1322,6 +1382,235 @@ document.getElementById("lpDev").innerHTML = ["de", "ds", "da"].map(k => {
       <div><b>${LP.ui.gap}</b><ul>${d.gap.map(x => `<li>${x}</li>`).join("")}</ul></div>
       <div><b>${LP.ui.bridgeCourses}</b><ul>${d.c.map(x => `<li>${x}</li>`).join("")}</ul></div></div></div>`;
 }).join("");
+
+/* ---------- UNIFIED PATH: shared core first, then specialise ---------- */
+// indices into LP.matrix covered by the common core (Git, Python, communication, Linux, cloud, Docker,
+// SQL, Bash, CI/CD, IaC, data modelling basics, statistics basics, networking basics)
+const UP_CORE = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 16, 20];
+const UP_EN = {
+  ui: { title: "🧩 The unified path — one shared core, then choose your specialisation",
+        sub: "Data Analyst, Data Engineer, Data Scientist and DevOps share a large base. Learn that base once, as a professional, and keep all four doors open until you know which one you want.",
+        whyH: "Why start with a shared core?", covH: "📐 How much of each career the core already covers",
+        covSub: "Calculated from the shared-skills matrix in the Learning paths tab. Click a bar to see what is left to learn.",
+        roadH: "🗺️ The roadmap", roadSub: "Three core phases for everyone (about 6–8 months), a decision checkpoint, then one specialisation branch. Tick courses as you finish them.",
+        coreTag: "COMMON CORE", branchTag: "SPECIALISE", chkH: "🚦 Checkpoint — which branch?", chkSub: "After the core you will have tried a bit of everything. Pick the statement that sounds most like you:",
+        branchH: "🌿 Your specialisation branch", left: "Still to learn after the core", extra: "Branch skills", cert: "🏅 Target certification", jobs: "💼 First job titles",
+        total: "⏱ Total time", core: "Core", branch: "Branch", vsSep: "vs learning this career alone",
+        switchH: "🔄 Changing your mind later", switchSub: "Because the core is shared, switching branch costs only the new specialisation, not starting over.",
+        from: "Finished branch", to: "Move to", extraT: "Extra study needed", same: "Same branch — nothing extra.",
+        habitsH: "🏆 Professional habits — do these throughout, from week one", weekH: "📅 Suggested weekly rhythm (≈12 h)",
+        skills: "Skills", courses: "Courses", project: "Capstone project", free: "Free", paid: "Paid", progress: "Core progress", reset: "Reset",
+        covered: "covered by the core", months: "months",
+        note: "Timings assume about 10–12 hours a week and are estimates. Course providers change prices and content; check each before enrolling." },
+  why: [
+    ["🚪", "Keep options open", "You don't have to choose a career on day one; decide once you have tried real work."],
+    ["⏳", "Save time", "The core covers roughly 60–75% of each career's skills, so you never learn the same thing twice."],
+    ["🔀", "Cheap to switch", "Moving between branches later costs months, not years."],
+    ["💪", "Stronger profile", "An analyst who can use Docker, or a DevOps engineer who knows SQL, stands out in hiring."]
+  ],
+  phases: [
+    { n: "Phase 1 · Computing foundations", t: "2–3 months",
+      goal: "Work comfortably like an engineer: terminal, version control, a real programming language and how the internet works.",
+      skills: ["Linux command line & Bash", "Git & GitHub (branches, pull requests)", "Python: functions, modules, files, virtual envs, packages", "Networking basics: HTTP, DNS, TCP/IP, REST APIs", "Debugging & reading documentation"],
+      c: [["Introduction to Linux (LFS101)", "Linux Foundation", 1], ["The Missing Semester of Your CS Education", "MIT", 1], ["Introduction to GitHub + Review pull requests", "GitHub Skills", 1], ["Python for Everybody", "University of Michigan, Coursera", 0], ["The Bits and Bytes of Computer Networking", "Google, Coursera", 0]],
+      p: "A Python command-line tool that calls a public API, saves results to files, with clean Git history on GitHub and a README." },
+    { n: "Phase 2 · Data & cloud foundations", t: "2–3 months",
+      goal: "Speak the language of data and the cloud: query it, model it, describe it, and run it somewhere other than your laptop.",
+      skills: ["SQL: joins, aggregation, CTEs, window functions", "Data modelling basics: tables, keys, star schema", "Statistics basics: distributions, mean/median, sampling, correlation", "pandas for tabular data", "Cloud fundamentals: compute, storage, IAM, pricing", "JSON, CSV, Parquet"],
+      c: [["Intro to SQL + Advanced SQL", "Kaggle Learn", 1], ["SQL practice (LeetCode / StrataScratch)", "LeetCode / StrataScratch", 1], ["Statistics & Probability", "Khan Academy", 1], ["Pandas", "Kaggle Learn", 1], ["AWS Cloud Practitioner Essentials", "AWS Skill Builder", 1], ["AWS Certified Cloud Practitioner (or AZ-900)", "AWS / Microsoft", 0]],
+      p: "Load the API data from Phase 1 into PostgreSQL, design a small star schema, and answer 10 business questions in SQL and pandas." },
+    { n: "Phase 3 · Engineering practices", t: "2 months",
+      goal: "Ship work the professional way: tested, containerised, automated and reproducible. This is the bridge every one of the four careers uses.",
+      skills: ["Docker & docker-compose", "Testing with pytest", "CI/CD with GitHub Actions", "Intro to Terraform (Infrastructure as Code)", "Writing technical docs & READMEs", "Agile basics: tickets, sprints, code review"],
+      c: [["Docker — Get Started guide", "Docker Docs", 1], ["GitHub Actions", "GitHub Skills", 1], ["Get Started — AWS / Azure / GCP tutorials", "HashiCorp Developer", 1], ["Data Engineering Zoomcamp (modules 1–2: Docker, Terraform)", "DataTalksClub", 1]],
+      p: "Core capstone: containerise your Phase 2 project, add tests, run it with GitHub Actions on every push, and deploy it to the cloud with Terraform. Add a simple chart of the results." }
+  ],
+  chk: [["I loved finding the story in the numbers and explaining it", "da"], ["I loved building the pipeline and making it run reliably", "de"], ["I loved the statistics and want to predict things", "ds"], ["I loved Docker, CI/CD and the cloud deployment", "devops"]],
+  branches: {
+    da: { t: "4–6", sep: "7–11", extra: ["Advanced SQL for analytics", "Power BI or Tableau", "Storytelling & presentation", "KPI & metric design", "A/B testing", "Business domain knowledge", "dbt (analytics engineering)"],
+          c: [["PL-300: Power BI Data Analyst learning path", "Microsoft Learn", 1], ["Google Advanced Data Analytics Certificate", "Coursera", 0], ["Storytelling with Data (book)", "Cole Nussbaumer Knaflic", 0], ["A/B Testing by Google", "Udacity", 1], ["dbt Fundamentals", "dbt Labs", 1]],
+          p: "Full business case: question → SQL/dbt model → Power BI dashboard → recommendation deck presented to a mock stakeholder.",
+          cert: "Microsoft PL-300 (Power BI Data Analyst)", jobs: "Data Analyst · BI Analyst · Product Analyst" },
+    de: { t: "5–7", sep: "11–15", extra: ["Dimensional modelling (Kimball)", "dbt in depth", "Airflow orchestration", "Spark", "Kafka & streaming", "Warehouses / lakehouses", "Data quality & governance"],
+          c: [["Data Engineering Zoomcamp (full course)", "DataTalksClub", 1], ["dbt Fundamentals", "dbt Labs", 1], ["Databricks Certified Data Engineer Associate", "Databricks Academy", 0], ["Designing Data-Intensive Applications (book)", "Martin Kleppmann", 0], ["Apache Kafka 101", "Confluent Developer", 1]],
+          p: "Data platform: batch (Airflow + dbt) and streaming (Kafka + Spark) into a warehouse, deployed with Terraform and CI/CD, with data-quality tests.",
+          cert: "AWS Data Engineer Associate · Google Professional Data Engineer · or Databricks DE Associate", jobs: "Data Engineer · Analytics Engineer · Data Platform Engineer" },
+    ds: { t: "6–9", sep: "11–17", extra: ["Probability & inference in depth", "Linear algebra & calculus for ML", "scikit-learn & model evaluation", "Deep learning", "Experimentation & causal inference", "LLMs & NLP", "MLOps (MLflow, model serving)"],
+          c: [["Mathematics for Machine Learning Specialization", "Imperial College, Coursera", 0], ["Machine Learning Specialization (Andrew Ng)", "DeepLearning.AI / Stanford, Coursera", 0], ["Practical Deep Learning for Coders", "fast.ai", 1], ["LLM Course", "Hugging Face", 1], ["MLOps Zoomcamp", "DataTalksClub", 1]],
+          p: "Prediction product: a model trained on your data, evaluated properly, served behind an API in Docker, with CI/CD and drift monitoring.",
+          cert: "AWS Certified Machine Learning Engineer – Associate", jobs: "Data Scientist · ML Engineer · Applied Scientist" },
+    devops: { t: "4–6", sep: "10–15", extra: ["Linux administration in depth", "Advanced networking & load balancing", "Kubernetes & Helm", "Terraform at scale & Ansible", "Prometheus & Grafana", "DevSecOps & IAM", "SRE practices & GitOps"],
+          c: [["Certified Kubernetes Administrator (CKA)", "Linux Foundation", 0], ["HashiCorp Terraform Associate", "HashiCorp", 0], ["DevOps learning path", "KodeKloud", 0], ["Site Reliability Engineering (book)", "Google, free online", 1], ["GitOps Fundamentals with Argo", "Codefresh", 1]],
+          p: "Production-style platform: your core app on Kubernetes with Helm, GitOps (Argo CD), autoscaling, monitoring dashboards and alerting.",
+          cert: "CKA + HashiCorp Terraform Associate (then AWS DevOps Engineer – Professional)", jobs: "DevOps Engineer · Cloud Engineer · Site Reliability Engineer" }
+  },
+  // extra months to switch from a finished branch (row) to another branch (column)
+  sw: { da: { de: "4–5", ds: "5–7", devops: "4–6" }, de: { da: "3–4", ds: "5–7", devops: "2–3" },
+        ds: { da: "2–3", de: "3–5", devops: "3–5" }, devops: { da: "4–5", de: "3–4", ds: "6–8" } },
+  habits: [
+    ["🐙", "Build in public on GitHub", "Every project gets a repo with a README, screenshots and clear commits."],
+    ["✍️", "Write what you learn", "A short blog or LinkedIn post per project; explaining is the best test of understanding."],
+    ["🧩", "Daily practice", "15–20 minutes of SQL or Python exercises (LeetCode, StrataScratch, HackerRank)."],
+    ["🤖", "Use AI assistants wisely", "Use copilots to go faster, but always read, test and understand the code they write."],
+    ["🤝", "Join a community", "DataTalksClub Slack, local meetups, open-source issues; ask and answer questions."],
+    ["🎤", "Practise communication", "Present each capstone in 5 minutes as if to a manager."],
+    ["🎯", "Interview prep (last month of the branch)", "SQL/Python tests, system-design basics, and STAR stories about your projects."]
+  ],
+  week: [["Learn (courses, reading)", 5], ["Build (project work)", 4], ["Practise (exercises)", 2], ["Share (write, community)", 1]]
+};
+
+const UP_AR = {
+  ui: { title: "🧩 المسار الموحّد — جذع مشترك واحد، ثم اختر تخصّصك",
+        sub: "محلل البيانات ومهندس البيانات وعالم البيانات و DevOps يتشاركون أساسًا كبيرًا. تعلّم هذا الأساس مرة واحدة باحترافية، وأبقِ الأبواب الأربعة مفتوحة حتى تعرف أيّها تريد.",
+        whyH: "لماذا تبدأ بجذع مشترك؟", covH: "📐 كم يغطي الجذع المشترك من كل مسار",
+        covSub: "محسوبة من مصفوفة المهارات المشتركة في تبويب مسارات التعلّم. انقر على الشريط لترى ما تبقّى لتتعلّمه.",
+        roadH: "🗺️ خارطة الطريق", roadSub: "ثلاث مراحل مشتركة للجميع (نحو 6–8 أشهر)، ثم نقطة قرار، ثم فرع تخصّص واحد. ضع علامة على الدورات عند إنهائها.",
+        coreTag: "الجذع المشترك", branchTag: "التخصّص", chkH: "🚦 نقطة القرار — أي فرع تختار؟", chkSub: "بعد الجذع المشترك ستكون قد جرّبت قليلًا من كل شيء. اختر العبارة الأقرب إليك:",
+        branchH: "🌿 فرع تخصّصك", left: "ما تبقّى لتتعلّمه بعد الجذع المشترك", extra: "مهارات الفرع", cert: "🏅 الشهادة المستهدفة", jobs: "💼 مسمّيات أول وظيفة",
+        total: "⏱ المدة الإجمالية", core: "الجذع", branch: "الفرع", vsSep: "مقابل تعلّم هذا المسار وحده",
+        switchH: "🔄 إذا غيّرت رأيك لاحقًا", switchSub: "لأن الجذع مشترك، فالتحويل إلى فرع آخر يكلّفك التخصّص الجديد فقط، لا البدء من الصفر.",
+        from: "الفرع الذي أنهيته", to: "الانتقال إلى", extraT: "الدراسة الإضافية المطلوبة", same: "نفس الفرع — لا شيء إضافي.",
+        habitsH: "🏆 عادات احترافية — مارسها طوال الطريق من الأسبوع الأول", weekH: "📅 إيقاع أسبوعي مقترح (≈12 ساعة)",
+        skills: "المهارات", courses: "الدورات", project: "المشروع الختامي", free: "مجاني", paid: "مدفوع", progress: "تقدّم الجذع المشترك", reset: "إعادة ضبط",
+        covered: "يغطيها الجذع المشترك", months: "أشهر",
+        note: "المدد تقديرية ومبنية على نحو 10–12 ساعة أسبوعيًا. يغيّر مزوّدو الدورات الأسعار والمحتوى؛ تحقّق من كل دورة قبل التسجيل." },
+  why: [
+    ["🚪", "أبقِ خياراتك مفتوحة", "لست مضطرًا لاختيار مسارك من اليوم الأول؛ قرّر بعد أن تجرّب عملًا حقيقيًا."],
+    ["⏳", "وفّر وقتك", "الجذع المشترك يغطي تقريبًا 60–75% من مهارات كل مسار، فلن تتعلّم الشيء نفسه مرتين."],
+    ["🔀", "تحويل منخفض التكلفة", "الانتقال بين الفروع لاحقًا يكلّف أشهرًا لا سنوات."],
+    ["💪", "ملف أقوى", "المحلل الذي يجيد Docker، أو مهندس DevOps الذي يعرف SQL، يتميّز في التوظيف."]
+  ],
+  phases: [
+    { n: "المرحلة 1 · أساسيات الحوسبة", t: "2–3 أشهر",
+      goal: "اعمل بارتياح كالمهندسين: الطرفية، وإدارة النسخ، ولغة برمجة حقيقية، وفهم كيف يعمل الإنترنت.",
+      skills: ["سطر أوامر Linux و Bash", "Git و GitHub (الفروع وطلبات الدمج)", "Python: الدوال والوحدات والملفات والبيئات الافتراضية والحزم", "أساسيات الشبكات: HTTP و DNS و TCP/IP وواجهات REST", "تتبّع الأخطاء وقراءة التوثيق"],
+      c: [["Introduction to Linux (LFS101)", "Linux Foundation", 1], ["The Missing Semester of Your CS Education", "MIT", 1], ["Introduction to GitHub + Review pull requests", "GitHub Skills", 1], ["Python for Everybody", "University of Michigan, Coursera", 0], ["The Bits and Bytes of Computer Networking", "Google, Coursera", 0]],
+      p: "أداة سطر أوامر بلغة Python تستدعي واجهة API عامة وتحفظ النتائج في ملفات، مع سجل Git نظيف على GitHub وملف README." },
+    { n: "المرحلة 2 · أساسيات البيانات والسحابة", t: "2–3 أشهر",
+      goal: "تحدّث لغة البيانات والسحابة: استعلم عنها، وصمّم نموذجها، وصِفها إحصائيًا، وشغّلها في مكان غير جهازك.",
+      skills: ["SQL: الربط والتجميع و CTEs ودوال النوافذ", "أساسيات نمذجة البيانات: الجداول والمفاتيح و Star schema", "أساسيات الإحصاء: التوزيعات والمتوسط والوسيط والعيّنات والارتباط", "pandas للبيانات الجدولية", "أساسيات السحابة: الحوسبة والتخزين والصلاحيات والتسعير", "صيغ JSON و CSV و Parquet"],
+      c: [["Intro to SQL + Advanced SQL", "Kaggle Learn", 1], ["SQL practice (LeetCode / StrataScratch)", "LeetCode / StrataScratch", 1], ["Statistics & Probability", "Khan Academy", 1], ["Pandas", "Kaggle Learn", 1], ["AWS Cloud Practitioner Essentials", "AWS Skill Builder", 1], ["AWS Certified Cloud Practitioner (أو AZ-900)", "AWS / Microsoft", 0]],
+      p: "حمّل بيانات المرحلة 1 إلى PostgreSQL، وصمّم Star schema صغيرًا، وأجب عن 10 أسئلة عمل باستخدام SQL و pandas." },
+    { n: "المرحلة 3 · الممارسات الهندسية", t: "شهران",
+      goal: "سلّم عملك بالطريقة الاحترافية: مُختبَر، داخل حاوية، مؤتمت، وقابل للتكرار. هذا هو الجسر الذي تستخدمه المسارات الأربعة كلها.",
+      skills: ["Docker و docker-compose", "الاختبارات باستخدام pytest", "CI/CD باستخدام GitHub Actions", "مقدّمة في Terraform (البنية كرمز)", "كتابة التوثيق التقني وملفات README", "أساسيات Agile: التذاكر والسبرنت ومراجعة الكود"],
+      c: [["Docker — Get Started guide", "Docker Docs", 1], ["GitHub Actions", "GitHub Skills", 1], ["Get Started — AWS / Azure / GCP tutorials", "HashiCorp Developer", 1], ["Data Engineering Zoomcamp (modules 1–2: Docker, Terraform)", "DataTalksClub", 1]],
+      p: "المشروع الختامي للجذع: ضع مشروع المرحلة 2 في حاوية، وأضف اختبارات، وشغّله عبر GitHub Actions مع كل دفع، وانشره على السحابة باستخدام Terraform. أضف رسمًا بسيطًا للنتائج." }
+  ],
+  chk: [["استمتعت باكتشاف القصة وراء الأرقام وشرحها", "da"], ["استمتعت ببناء خط البيانات وجعله يعمل بموثوقية", "de"], ["استمتعت بالإحصاء وأريد التنبّؤ بالأشياء", "ds"], ["استمتعت بـ Docker و CI/CD والنشر على السحابة", "devops"]],
+  branches: {
+    da: { t: "4–6", sep: "7–11", extra: ["SQL متقدّم للتحليلات", "Power BI أو Tableau", "سرد القصص والعرض", "تصميم المؤشرات والمقاييس", "اختبارات A/B", "فهم مجال العمل", "dbt (هندسة التحليلات)"],
+          c: [["PL-300: Power BI Data Analyst learning path", "Microsoft Learn", 1], ["Google Advanced Data Analytics Certificate", "Coursera", 0], ["Storytelling with Data (كتاب)", "Cole Nussbaumer Knaflic", 0], ["A/B Testing by Google", "Udacity", 1], ["dbt Fundamentals", "dbt Labs", 1]],
+          p: "حالة عمل كاملة: سؤال ← نموذج SQL/dbt ← لوحة Power BI ← عرض توصيات أمام صاحب قرار افتراضي.",
+          cert: "Microsoft PL-300 (Power BI Data Analyst)", jobs: "محلل بيانات · محلل ذكاء أعمال · محلل منتج" },
+    de: { t: "5–7", sep: "11–15", extra: ["النمذجة البُعدية (Kimball)", "dbt بعمق", "جدولة المهام بـ Airflow", "Spark", "Kafka والبث المباشر", "المستودعات وبيوت البحيرات", "جودة البيانات وحوكمتها"],
+          c: [["Data Engineering Zoomcamp (full course)", "DataTalksClub", 1], ["dbt Fundamentals", "dbt Labs", 1], ["Databricks Certified Data Engineer Associate", "Databricks Academy", 0], ["Designing Data-Intensive Applications (كتاب)", "Martin Kleppmann", 0], ["Apache Kafka 101", "Confluent Developer", 1]],
+          p: "منصة بيانات: معالجة دفعية (Airflow + dbt) وبث مباشر (Kafka + Spark) إلى مستودع، منشورة بـ Terraform و CI/CD، مع اختبارات جودة البيانات.",
+          cert: "AWS Data Engineer Associate · Google Professional Data Engineer · أو Databricks DE Associate", jobs: "مهندس بيانات · مهندس تحليلات · مهندس منصة بيانات" },
+    ds: { t: "6–9", sep: "11–17", extra: ["الاحتمالات والاستدلال بعمق", "الجبر الخطي والتفاضل لتعلّم الآلة", "scikit-learn وتقييم النماذج", "التعلّم العميق", "التجارب والاستدلال السببي", "النماذج اللغوية ومعالجة اللغة", "MLOps (MLflow وتقديم النماذج)"],
+          c: [["Mathematics for Machine Learning Specialization", "Imperial College, Coursera", 0], ["Machine Learning Specialization (Andrew Ng)", "DeepLearning.AI / Stanford, Coursera", 0], ["Practical Deep Learning for Coders", "fast.ai", 1], ["LLM Course", "Hugging Face", 1], ["MLOps Zoomcamp", "DataTalksClub", 1]],
+          p: "منتج تنبّؤي: نموذج مدرّب على بياناتك ومقيّم بشكل صحيح، يُقدَّم عبر API داخل Docker، مع CI/CD ومراقبة لانحراف البيانات.",
+          cert: "AWS Certified Machine Learning Engineer – Associate", jobs: "عالم بيانات · مهندس تعلّم آلة · عالم تطبيقي" },
+    devops: { t: "4–6", sep: "10–15", extra: ["إدارة Linux بعمق", "شبكات متقدّمة وموازنة الأحمال", "Kubernetes و Helm", "Terraform على نطاق واسع و Ansible", "Prometheus و Grafana", "DevSecOps والصلاحيات", "ممارسات SRE و GitOps"],
+          c: [["Certified Kubernetes Administrator (CKA)", "Linux Foundation", 0], ["HashiCorp Terraform Associate", "HashiCorp", 0], ["DevOps learning path", "KodeKloud", 0], ["Site Reliability Engineering (كتاب)", "Google, مجاني على الإنترنت", 1], ["GitOps Fundamentals with Argo", "Codefresh", 1]],
+          p: "منصة بأسلوب الإنتاج: تطبيق الجذع المشترك على Kubernetes مع Helm و GitOps (Argo CD) والتوسّع التلقائي ولوحات المراقبة والتنبيهات.",
+          cert: "CKA + HashiCorp Terraform Associate (ثم AWS DevOps Engineer – Professional)", jobs: "مهندس DevOps · مهندس سحابة · مهندس موثوقية المواقع (SRE)" }
+  },
+  sw: UP_EN.sw,
+  habits: [
+    ["🐙", "ابنِ علنًا على GitHub", "كل مشروع له مستودع مع README ولقطات شاشة وسجل تغييرات واضح."],
+    ["✍️", "اكتب ما تتعلّمه", "تدوينة قصيرة أو منشور على LinkedIn لكل مشروع؛ الشرح أفضل اختبار للفهم."],
+    ["🧩", "تمرين يومي", "15–20 دقيقة من تمارين SQL أو Python (LeetCode و StrataScratch و HackerRank)."],
+    ["🤖", "استخدم مساعدي الذكاء الاصطناعي بحكمة", "استعن بهم للسرعة، لكن اقرأ الكود واختبره وافهمه دائمًا."],
+    ["🤝", "انضم إلى مجتمع", "Slack الخاص بـ DataTalksClub، واللقاءات المحلية، ومشاريع المصدر المفتوح؛ اسأل وأجب."],
+    ["🎤", "تدرّب على التواصل", "اعرض كل مشروع ختامي في 5 دقائق كأنك تعرضه على مديرك."],
+    ["🎯", "الاستعداد للمقابلات (آخر شهر في الفرع)", "اختبارات SQL و Python، وأساسيات تصميم الأنظمة، وقصص STAR عن مشاريعك."]
+  ],
+  week: [["التعلّم (دورات وقراءة)", 5], ["البناء (العمل على المشروع)", 4], ["التمرين (تمارين)", 2], ["المشاركة (كتابة ومجتمع)", 1]]
+};
+
+const UP = AR_ON ? UP_AR : UP_EN;
+[["upTitle", "title"], ["upSub", "sub"], ["upWhyH", "whyH"], ["upCovH", "covH"], ["upCovSub", "covSub"], ["upRoadH", "roadH"],
+ ["upRoadSub", "roadSub"], ["upChkH", "chkH"], ["upChkSub", "chkSub"], ["upSwitchH", "switchH"], ["upSwitchSub", "switchSub"],
+ ["upHabitsH", "habitsH"], ["upWeekH", "weekH"], ["upNote", "note"]]
+  .forEach(([id, key]) => document.getElementById(id).innerHTML = UP.ui[key]);
+
+document.getElementById("upWhy").innerHTML = UP.why.map(([i, h, b]) => `<div class="up-why"><span>${i}</span><b>${h}</b><small>${b}</small></div>`).join("");
+
+// coverage of each career by the core, from the shared-skills matrix
+const upRows = k => LP.matrix.map((r, i) => [r, i]).filter(([r]) => has(r, k));
+document.getElementById("upCov").innerHTML = LK.map(k => {
+  const rows = upRows(k), inCore = rows.filter(([, i]) => UP_CORE.includes(i)), pct = Math.round(inCore.length / rows.length * 100), r = LROLE(k);
+  const left = rows.filter(([, i]) => !UP_CORE.includes(i)).map(([row]) => `<span class="chip">${row[0]}</span>`).join("");
+  return `<div class="up-cov" onclick="this.classList.toggle('open')" style="--c:${r.color}">
+    <div class="up-cov-top"><span>${r.icon} ${r.name}</span><b>${pct}% <small>${UP.ui.covered}</small></b></div>
+    <div class="fp-meter"><div data-w="${pct}%" style="background:${r.color};width:0"></div></div>
+    <div class="up-left"><small>${UP.ui.left}:</small><br>${left}</div></div>`;
+}).join("");
+
+// roadmap: core phases with saved progress
+const upIds = []; UP.phases.forEach((ph, pi) => ph.c.forEach((_, ci) => upIds.push(`up-${pi}-${ci}`)));
+function renderCore() {
+  const el = document.getElementById("upCore");
+  el.innerHTML = `<div class="lp-prog"><span>${UP.ui.progress}: <b id="upPct"></b></span><div class="fp-meter"><div id="upBar" style="background:linear-gradient(90deg,var(--da),var(--de),var(--ds),var(--do))"></div></div><button class="lp-reset" id="upReset">${UP.ui.reset}</button></div>
+    <div class="up-tag">${UP.ui.coreTag}</div>
+    <div class="up-phases">${UP.phases.map((ph, pi) => `<div class="up-phase">
+      <div class="lp-head"><span class="lp-num" style="color:#c7cbe8">${ph.n}</span><span class="lp-time">⏱ ${ph.t}</span></div>
+      <p class="up-goal">${ph.goal}</p>
+      <div class="lp-label">${UP.ui.skills}</div><ul class="up-list">${ph.skills.map(s => `<li>${s}</li>`).join("")}</ul>
+      <div class="lp-label">${UP.ui.courses}</div>${ph.c.map(([n, prov, free], ci) => `<label class="lp-course"><input type="checkbox" data-id="up-${pi}-${ci}" ${store.get(`up-${pi}-${ci}`) ? "checked" : ""}>
+        <span><b>${n}</b><br><small>${prov} · <span class="${free ? "free" : "paid"}">${free ? UP.ui.free : UP.ui.paid}</span></small></span></label>`).join("")}
+      <div class="lp-label">🛠 ${UP.ui.project}</div><div class="lp-proj">${ph.p}</div></div>`).join('<div class="up-arrow">⬇</div>')}</div>`;
+  const upd = () => {
+    const done = upIds.filter(id => store.get(id)).length, pct = Math.round(done / upIds.length * 100);
+    el.querySelector("#upPct").textContent = `${done}/${upIds.length} (${pct}%)`;
+    el.querySelector("#upBar").style.width = pct + "%";
+  };
+  el.querySelectorAll("input").forEach(i => i.onchange = () => { store.set(i.dataset.id, i.checked); upd(); });
+  el.querySelector("#upReset").onclick = () => { upIds.forEach(id => store.set(id, false)); renderCore(); };
+  upd();
+}
+renderCore();
+
+// checkpoint → branch
+const chkEl = document.getElementById("upChk");
+chkEl.innerHTML = UP.chk.map(([txt, k]) => `<button class="opt up-chk" data-k="${k}" style="--c:${LROLE(k).color}">${LROLE(k).icon} ${txt}</button>`).join("");
+const lo = s => +s.split("–")[0], hi = s => +s.split("–")[1];
+function showBranch(k) {
+  chkEl.querySelectorAll("button").forEach(b => b.classList.toggle("sel", b.dataset.k === k));
+  const b = UP.branches[k], r = LROLE(k), coreT = "6–8";
+  const left = upRows(k).filter(([, i]) => !UP_CORE.includes(i)).map(([row]) => `<span class="chip">${row[0]}</span>`).join("");
+  const tot = `${lo(coreT) + lo(b.t)}–${hi(coreT) + hi(b.t)}`, maxT = 26;
+  document.getElementById("upBranch").innerHTML = `<div class="up-branch" style="--c:${r.color}">
+    <div class="up-tag" style="background:${r.color};color:#111">${UP.ui.branchTag}: ${r.icon} ${r.name} · ⏱ ${b.t} ${UP.ui.months}</div>
+    <div class="dp-cols">
+      <div><div class="lp-label">${UP.ui.left}</div>${left}<div class="lp-label">${UP.ui.extra}</div><ul class="up-list">${b.extra.map(x => `<li>${x}</li>`).join("")}</ul></div>
+      <div><div class="lp-label">${UP.ui.courses}</div>${b.c.map(([n, prov, free]) => `<div class="up-c"><b>${n}</b><br><small>${prov} · <span class="${free ? "free" : "paid"}">${free ? UP.ui.free : UP.ui.paid}</span></small></div>`).join("")}</div>
+      <div><div class="lp-label">🛠 ${UP.ui.project}</div><div class="lp-proj">${b.p}</div>
+        <div class="lp-label">${UP.ui.cert}</div><div>${b.cert}</div><div class="lp-label">${UP.ui.jobs}</div><div>${b.jobs}</div></div>
+    </div>
+    <div class="lp-label">${UP.ui.total}: <b style="color:var(--text)">${tot} ${UP.ui.months}</b> <span style="text-transform:none">(${UP.ui.vsSep}: ${b.sep} ${UP.ui.months})</span></div>
+    <div class="up-time"><span style="width:${(lo(coreT) + hi(coreT)) / 2 / maxT * 100}%;background:#8b93d6">${UP.ui.core}</span><span style="width:${(lo(b.t) + hi(b.t)) / 2 / maxT * 100}%;background:${r.color};color:#111">${UP.ui.branch}</span></div>
+  </div>`;
+}
+chkEl.querySelectorAll("button").forEach(b => b.onclick = () => showBranch(b.dataset.k));
+showBranch("de");
+
+// switch-cost calculator
+const swEl = document.getElementById("upSwitch");
+const swOpts = sel => LK.map(k => `<option value="${k}" ${k === sel ? "selected" : ""}>${LROLE(k).icon} ${LROLE(k).name}</option>`).join("");
+swEl.innerHTML = `<label>${UP.ui.from}: <select id="swA">${swOpts("de")}</select></label> <b>➜</b> <label>${UP.ui.to}: <select id="swB">${swOpts("devops")}</select></label><div id="swOut" class="sw-out"></div>`;
+function showSwitch() {
+  const a = swEl.querySelector("#swA").value, b = swEl.querySelector("#swB").value;
+  swEl.querySelector("#swOut").innerHTML = a === b ? UP.ui.same :
+    `${UP.ui.extraT}: <b style="font-size:1.6rem;color:${LROLE(b).color}">${UP.sw[a][b]} ${UP.ui.months}</b>`;
+}
+swEl.querySelectorAll("select").forEach(s => s.onchange = showSwitch);
+showSwitch();
+
+document.getElementById("upHabits").innerHTML = UP.habits.map(([i, h, b]) => `<div class="up-why"><span>${i}</span><b>${h}</b><small>${b}</small></div>`).join("");
+document.getElementById("upWeek").innerHTML = UP.week.map(([l, h], i) => `<span style="flex:${h};background:${["#3ba7ff", "#ff8a3d", "#b46cff", "#2dd4bf"][i]}">${l}<br><b>${h} h</b></span>`).join("");
+function animateUP() { document.querySelectorAll(".up-cov .fp-meter div").forEach(d => { d.style.width = 0; requestAnimationFrame(() => setTimeout(() => d.style.width = d.dataset.w, 50)); }); }
 
 /* ---------- MYTHS ---------- */
 const MYTHS = AR_ON ? AR.MYTHS : [
