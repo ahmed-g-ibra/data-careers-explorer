@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Data Analyst vs Data Engineer vs Data Scientist (+ DevOps & unified path)</title>
+<title>Data Analyst vs Data Engineer vs Data Scientist vs DevOps Engineer</title>
 <style>
   :root {
+    --devops: #2dd4bf;
     --bg: #0f1220; --panel: #171b2e; --panel2: #1f2440; --text: #e8eaf6; --muted: #9aa0c3;
     --line: #2c3256;
     --da: #3ba7ff; --de: #ff8a3d; --ds: #b46cff;
@@ -15,7 +16,7 @@
   a { color: inherit; }
   header { padding: 48px 24px 24px; text-align: center; background: radial-gradient(ellipse at top, #262c55 0%, var(--bg) 70%); }
   header h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 4vw, 2.8rem); }
-  header h1 .da { color: var(--da); } header h1 .de { color: var(--de); } header h1 .ds { color: var(--ds); }
+  header h1 .da { color: var(--da); } header h1 .de { color: var(--de); } header h1 .ds { color: var(--ds); } header h1 .devops { color: var(--devops); }
   header p { color: var(--muted); max-width: 720px; margin: 0 auto; }
   nav { position: sticky; top: 0; z-index: 10; display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; padding: 10px; background: rgba(15,18,32,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
   nav button { background: var(--panel); color: var(--text); border: 1px solid var(--line); padding: 8px 14px; border-radius: 999px; cursor: pointer; font-size: .9rem; }
@@ -68,7 +69,7 @@
   table { width: 100%; border-collapse: collapse; min-width: 760px; }
   th, td { padding: 12px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); font-size: .93rem; }
   th { background: var(--panel2); position: sticky; top: 0; }
-  th.da { color: var(--da); } th.de { color: var(--de); } th.ds { color: var(--ds); }
+  th.da { color: var(--da); } th.de { color: var(--de); } th.ds { color: var(--ds); } th.devops { color: var(--devops); }
   td:first-child { font-weight: 600; color: var(--muted); width: 160px; background: var(--panel); }
   tr:hover td { background: #1c2140; }
   .catchip { display: inline-block; font-size: .7rem; padding: 2px 7px; border-radius: 6px; background: #2b3160; color: var(--muted); margin-top: 4px; font-weight: 400; }
@@ -131,7 +132,7 @@
   /* Quiz */
   .quiz { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 24px; max-width: 760px; margin: 0 auto; }
   .progress { height: 6px; background: var(--panel2); border-radius: 3px; overflow: hidden; margin-bottom: 18px; }
-  .progress div { height: 100%; background: linear-gradient(90deg, var(--da), var(--ds), var(--de)); transition: width .3s; }
+  .progress div { height: 100%; background: linear-gradient(90deg, var(--da), var(--ds), var(--de), var(--devops)); transition: width .3s; }
   .q { font-size: 1.15rem; font-weight: 600; margin-bottom: 14px; }
   .opt { display: block; width: 100%; text-align: left; background: var(--panel2); color: var(--text); border: 1px solid var(--line); padding: 12px 16px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; font-size: .97rem; transition: border-color .2s, transform .1s; }
   .opt:hover { border-color: #6a74c9; transform: translateX(3px); }
@@ -290,8 +291,8 @@
 
 <header>
   <button class="langbtn" id="langBtn">العربية</button>
-  <h1><span class="da">Data Analyst</span> vs <span class="de">Data Engineer</span> vs <span class="ds">Data Scientist</span></h1>
-  <p>Three roles that all "work with data" — but ask different questions, use different tools, and produce different things. Explore every angle below.</p>
+  <h1><span class="da">Data Analyst</span> vs <span class="de">Data Engineer</span> vs <span class="ds">Data Scientist</span> vs <span class="devops">DevOps Engineer</span></h1>
+  <p>Four tech roles that work with data and the systems behind it — but ask different questions, use different tools, and produce different things. Explore every angle below.</p>
 </header>
 
 <nav id="nav"></nav>
@@ -489,7 +490,7 @@
 <script>
 // Arabic translations for index.html. Loaded before the main script; used when the Arabic option is on.
 window.AR = {
-  title: "محلل البيانات مقابل مهندس البيانات مقابل عالم البيانات",
+  title: "محلل البيانات مقابل مهندس البيانات مقابل عالم البيانات مقابل مهندس DevOps",
 
   ROLES: {
     da: { name: "محلل البيانات", short: "المحلل", tag: "يحوّل البيانات إلى رؤى وقرارات",
@@ -511,8 +512,8 @@ window.AR = {
 
   // [selector, html] — an array of html fills every match in order
   static: [
-    ["header h1", '<span class="da">محلل البيانات</span> مقابل <span class="de">مهندس البيانات</span> مقابل <span class="ds">عالم البيانات</span>'],
-    ["header p", "ثلاثة أدوار كلها \"تعمل بالبيانات\"، لكنها تطرح أسئلة مختلفة، وتستخدم أدوات مختلفة، وتنتج مخرجات مختلفة. استكشف كل الجوانب أدناه."],
+    ["header h1", '<span class="da">محلل البيانات</span> مقابل <span class="de">مهندس البيانات</span> مقابل <span class="ds">عالم البيانات</span> مقابل <span class="devops">مهندس DevOps</span>'],
+    ["header p", "أربعة أدوار تقنية تعمل بالبيانات والأنظمة التي خلفها، لكنها تطرح أسئلة مختلفة، وتستخدم أدوات مختلفة، وتنتج مخرجات مختلفة. استكشف كل الجوانب أدناه."],
     ["#overview h2", "نظرة سريعة"],
     ["#overview .sub", "انقر على أي بطاقة لعرض التفاصيل."],
     ["#overview .analogy h3", ["🍽️ تشبيه المطعم", "❓ السؤال الأساسي الذي يجيب عنه كل دور"]],
@@ -773,6 +774,154 @@ const ROLES = {
 };
 const KEYS = ["da", "de", "ds"];
 if (AR_ON) KEYS.forEach(k => Object.assign(ROLES[k], AR.ROLES[k]));
+/* ---------- DevOps as a fourth role in every tab ---------- */
+const DO_EN = {
+  role: { name: "DevOps Engineer", short: "DevOps", color: "var(--devops)", icon: "♾️",
+          tag: "Automates how software is built, shipped and run",
+          summary: "Builds and runs the platforms, pipelines and cloud infrastructure that let teams ship software quickly, safely and reliably.",
+          focus: ["CI/CD pipelines", "Cloud infrastructure as code", "Containers & Kubernetes", "Monitoring, reliability & incident response"],
+          output: "CI/CD pipelines, infrastructure code, platforms, runbooks, dashboards & alerts",
+          question: "How do we ship and run software quickly and reliably?" },
+  analogy: "<b>The building & maintenance crew.</b> Keeps the power, gas, ovens and delivery systems running, automates restocking, and fixes things at 2 a.m. so service never stops.",
+  stages: [
+    ["Provides the servers, networks and access that ingestion jobs run on.", 0],
+    ["Provisions storage and databases with Terraform, handles backups, security and cost.", 1],
+    ["Runs the compute (containers, clusters) that transformations execute on.", 0],
+    ["Not involved in analysis; may provide notebooks or BI servers as a platform.", 0],
+    ["Provides GPU/compute and reproducible environments for training.", 0],
+    ["Core work: CI/CD, Kubernetes, release automation, monitoring, on-call and incident response.", 1],
+    ["Shares uptime, incident reports and post-mortems; documents the platform.", 0]
+  ],
+  rows: [
+    "Let teams ship software fast and safely, and keep systems running.",
+    "How do we build, release and run software reliably at scale?",
+    "Operational (platform & reliability)",
+    "CI/CD pipelines, infrastructure code, Kubernetes platforms, monitoring dashboards, runbooks",
+    "Developers, data teams, product teams, SRE/security",
+    "Bash, Python, YAML, HCL (Terraform), sometimes Go",
+    "Minimal",
+    "Very high: automation, testing, version control, system design",
+    "Medium",
+    "Medium — mostly engineering teams; clear incident communication",
+    "Linux, Git, Docker, Kubernetes, Terraform, Ansible, GitHub Actions/Jenkins, Prometheus, Grafana, AWS/Azure/GCP",
+    "Logs, metrics, traces and configs, not business data",
+    "Huge volumes of logs and metrics; scale of systems matters more than data",
+    "Present & always-on (uptime)",
+    "Continuous: daily automation work plus on-call rotations",
+    "Fast, frequent deploys with few failures; systems stay up",
+    "Outage or security breach → customers can't use the product",
+    "Bachelor's in CS/IT/networking, or sysadmin/IT background + certifications",
+    "Medium-high — needs Linux, networking and automation",
+    "$$ – $$$",
+    "CKA, HashiCorp Terraform Associate, AWS DevOps Engineer Professional, AZ-400",
+    "Low–Medium: AI writes scripts and IaC, but reliability, security and platform design stay human",
+    "From script writer → platform engineer & reliability owner, incl. AI/ML infrastructure",
+    "SRE, Platform Engineer, Cloud Engineer, MLOps Engineer, DevSecOps"
+  ],
+  skills: [4, 7, 1, 1, 9, 10, 3, 4, 6, 2],
+  tools: ["Python", "Bash", "PostgreSQL", "Git", "Docker", "Kubernetes", "Terraform", "CI/CD", "AWS / GCP / Azure", "Kafka", "MLflow"],
+  newTools: [["Ansible", "devops"], ["Jenkins / GitHub Actions", "devops de"], ["Helm", "devops"], ["Prometheus & Grafana", "devops de"], ["Argo CD", "devops"], ["Nginx", "devops"], ["Go", "devops"]],
+  day: { items: [["09:00", "Check dashboards and alerts; one service's error rate spiked overnight."], ["09:30", "Find a bad config in the last release; roll it back with one command and write a short incident note."], ["11:00", "Pair with developers to speed up a slow CI pipeline (cache dependencies, run tests in parallel)."], ["13:00", "Lunch."], ["14:00", "Write Terraform for a new staging environment and open a pull request."], ["15:30", "Upgrade a Kubernetes cluster node pool and patch a security vulnerability."], ["17:00", "Update runbooks and hand over on-call notes."]],
+         love: "Automating away manual work; seeing deploys go from hours to minutes.", hard: "On-call pressure; many moving parts; being the bottleneck when every team needs something." },
+  scen: [
+    ["Keep the platform reliable", "Sets up monitoring and alerts on the subscription and billing services so failures that cause churn are caught early, and automates safe rollbacks.", "Monitoring dashboards + alerts + rollback pipeline", "# alert when checkout errors exceed 2%\n- alert: CheckoutErrors\n  expr: rate(http_errors{svc=\"checkout\"}[5m]) > 0.02"],
+    ["Scale for the peaks", "Configures autoscaling for the rider app and ops tools so they handle peak hours, and load-tests before big holidays.", "Kubernetes autoscaling + load-test report", "kubectl autoscale deployment rider-api \\\n  --min=3 --max=30 --cpu-percent=70"],
+    ["Ship it safely", "Builds the CI/CD pipeline and a canary release so the new feature goes to 5% of users first, with automatic rollback if errors rise.", "CI/CD pipeline + canary deployment", "- uses: actions/checkout@v4\n- run: docker build -t recs:$GITHUB_SHA .\n- run: helm upgrade recs ./chart --set canary.weight=5"]
+  ],
+  ladder: ["Junior DevOps / Cloud Engineer", "DevOps Engineer", "Senior DevOps / SRE", "Staff Platform Engineer or DevOps Manager", "Head of Platform / Infrastructure Director"],
+  meters: [4, 4, 5, 5, 4, 1, 2],
+  move: "<b>Data Engineer → DevOps / Platform Engineer:</b> the closest move; add networking, Kubernetes, security and SRE.",
+  ai: { risk: 30, level: "Low–Medium",
+        why: "AI assistants write Bash scripts, Terraform and pipeline YAML quickly, and AIOps tools help triage alerts. But someone must design secure, reliable, cost-efficient platforms and own incidents. AI products themselves need more infrastructure (GPUs, model serving), so demand is strong.",
+        tasks: [["Writing scripts & pipeline YAML", 65, "Copilots generate most boilerplate; humans review for security and side effects."],
+                ["Writing Terraform / IaC", 55, "AI drafts modules well; state, environments and blast radius need human judgement."],
+                ["Alert triage & log analysis", 45, "AIOps groups alerts and suggests causes; humans confirm and decide."],
+                ["Documentation & runbooks", 60, "AI drafts runbooks from incidents and configs."],
+                ["Incident response & on-call", 20, "Accountability, coordination and risky decisions under pressure stay human."],
+                ["Platform & architecture design", 15, "Trade-offs of cost, reliability, security and team needs."],
+                ["Security & compliance", 15, "Regulation and accountability stay with people."],
+                ["Building AI/ML infrastructure", 10, "GPU clusters, model serving and LLMOps are a fast-growing area."]],
+        shift: { auto: ["Hand-written scripts and YAML", "Manual server setup", "First-level alert triage"],
+                 aug: ["Faster IaC and pipeline development", "AI-assisted incident analysis", "More services per engineer"],
+                 next: ["Platform Engineer", "Site Reliability Engineer", "MLOps / LLMOps Engineer", "DevSecOps / Cloud Security Engineer"] },
+        fp: [["Strong Kubernetes & platform design", 7], ["Security, IAM & compliance knowledge", 6], ["Run AI/ML infrastructure (GPUs, model serving)", 6], ["Own incidents and SRE practices", 5], ["Use AI assistants and review their output critically", 5]] },
+  aiRows: ["Low–Medium", "Boilerplate scripts, pipeline YAML, basic IaC, runbooks", "Platform design, incident ownership, security, reliability", "Strong — AI products need more infrastructure and platforms", "Engineer who only does manual server setup or copies scripts", "Kubernetes + security + AI/ML infrastructure (MLOps, GPUs)"],
+  myth: ["DevOps is just a job title for people who run servers.", "DevOps is a culture and set of practices: automation, CI/CD, shared ownership between development and operations. The engineer role makes that happen with code."],
+  quiz: ["Keeping a system online for millions of users with no downtime", "Networks, operating systems & the cloud", "Automating everything and fixing production issues", "Docker / Kubernetes / Terraform", "Check if a server or service is down", "Automation scripts and infrastructure code", "“We deploy 50 times a day with zero downtime”", "Basic maths is enough; I prefer systems and automation"]
+};
+
+const DO_AR = {
+  role: { name: "مهندس DevOps", short: "DevOps", tag: "يؤتمت بناء البرمجيات وإطلاقها وتشغيلها",
+          summary: "يبني ويشغّل المنصات وخطوط CI/CD والبنية السحابية التي تتيح للفرق إطلاق البرمجيات بسرعة وأمان وموثوقية.",
+          focus: ["خطوط CI/CD", "البنية السحابية كرمز", "الحاويات و Kubernetes", "المراقبة والموثوقية والاستجابة للحوادث"],
+          output: "خطوط CI/CD، كود البنية التحتية، منصات، أدلة تشغيل، لوحات مراقبة وتنبيهات",
+          question: "كيف نطلق البرمجيات ونشغّلها بسرعة وموثوقية؟" },
+  analogy: "<b>فريق المبنى والصيانة.</b> يحافظ على الكهرباء والغاز والأفران وأنظمة التوصيل، ويؤتمت إعادة التموين، ويصلح الأعطال في الثانية فجرًا حتى لا تتوقف الخدمة.",
+  stages: [
+    ["يوفّر الخوادم والشبكات وصلاحيات الوصول التي تعمل عليها مهام الاستيعاب.", 0],
+    ["يجهّز التخزين وقواعد البيانات باستخدام Terraform، ويتولّى النسخ الاحتياطي والأمن والتكلفة.", 1],
+    ["يشغّل موارد الحوسبة (الحاويات والعناقيد) التي تُنفَّذ عليها التحويلات.", 0],
+    ["لا يشارك في التحليل؛ قد يوفّر الدفاتر أو خوادم BI كمنصة.", 0],
+    ["يوفّر الحوسبة و GPU وبيئات قابلة للتكرار للتدريب.", 0],
+    ["العمل الأساسي: CI/CD و Kubernetes وأتمتة الإطلاق والمراقبة والمناوبة والاستجابة للحوادث.", 1],
+    ["يشارك تقارير التوفّر والحوادث ومراجعات ما بعد الحادث؛ ويوثّق المنصة.", 0]
+  ],
+  rows: [
+    "تمكين الفرق من إطلاق البرمجيات بسرعة وأمان، وإبقاء الأنظمة تعمل.",
+    "كيف نبني البرمجيات ونطلقها ونشغّلها بموثوقية على نطاق واسع؟",
+    "تشغيلي (المنصة والموثوقية)",
+    "خطوط CI/CD، كود البنية التحتية، منصات Kubernetes، لوحات مراقبة، أدلة تشغيل",
+    "المطوّرون، فرق البيانات، فرق المنتج، فرق SRE والأمن",
+    "Bash و Python و YAML و HCL (Terraform)، وأحيانًا Go",
+    "قليل",
+    "مرتفعة جدًا: الأتمتة، الاختبارات، إدارة النسخ، تصميم الأنظمة",
+    "متوسط",
+    "متوسط — غالبًا مع فرق هندسية؛ وتواصل واضح أثناء الحوادث",
+    "Linux، Git، Docker، Kubernetes، Terraform، Ansible، GitHub Actions/Jenkins، Prometheus، Grafana، AWS/Azure/GCP",
+    "سجلات ومقاييس وتتبّعات وإعدادات، لا بيانات أعمال",
+    "كميات ضخمة من السجلات والمقاييس؛ حجم الأنظمة أهم من البيانات",
+    "الحاضر وعلى مدار الساعة (التوفّر)",
+    "مستمرة: أتمتة يومية مع مناوبات",
+    "إطلاقات سريعة ومتكررة بأعطال قليلة؛ والأنظمة تبقى تعمل",
+    "انقطاع الخدمة أو اختراق أمني ← العملاء لا يستطيعون استخدام المنتج",
+    "بكالوريوس في الحاسب أو تقنية المعلومات أو الشبكات، أو خلفية في إدارة الأنظمة مع شهادات",
+    "متوسطة إلى مرتفعة — تتطلّب Linux والشبكات والأتمتة",
+    "$$ – $$$",
+    "CKA، HashiCorp Terraform Associate، AWS DevOps Engineer Professional، AZ-400",
+    "منخفض إلى متوسط: الذكاء الاصطناعي يكتب السكربتات والبنية كرمز، لكن الموثوقية والأمن وتصميم المنصات تبقى بشرية",
+    "من كاتب سكربتات ← مهندس منصات ومسؤول عن الموثوقية، بما فيها بنية الذكاء الاصطناعي وتعلّم الآلة",
+    "SRE، مهندس منصات، مهندس سحابة، مهندس MLOps، DevSecOps"
+  ],
+  day: { items: [["09:00", "مراجعة لوحات المراقبة والتنبيهات؛ ارتفع معدل الأخطاء في إحدى الخدمات ليلًا."], ["09:30", "اكتشاف إعداد خاطئ في آخر إطلاق؛ التراجع عنه بأمر واحد وكتابة ملاحظة حادث قصيرة."], ["11:00", "العمل مع المطوّرين لتسريع خط CI بطيء (تخزين الاعتماديات مؤقتًا وتشغيل الاختبارات بالتوازي)."], ["13:00", "الغداء."], ["14:00", "كتابة Terraform لبيئة اختبار جديدة وفتح طلب دمج."], ["15:30", "ترقية مجموعة عُقد في عنقود Kubernetes وسدّ ثغرة أمنية."], ["17:00", "تحديث أدلة التشغيل وتسليم ملاحظات المناوبة."]],
+         love: "أتمتة العمل اليدوي؛ ورؤية الإطلاق يتحوّل من ساعات إلى دقائق.", hard: "ضغط المناوبة؛ وكثرة الأجزاء المتحرّكة؛ وأن تصبح عنق الزجاجة حين تحتاجك كل الفرق." },
+  scen: [
+    ["الحفاظ على موثوقية المنصة", "يضبط المراقبة والتنبيهات على خدمات الاشتراك والفوترة ليُكتشف مبكرًا أي عطل يسبّب التسرّب، ويؤتمت التراجع الآمن.", "لوحات مراقبة + تنبيهات + خط تراجع", "# alert when checkout errors exceed 2%\n- alert: CheckoutErrors\n  expr: rate(http_errors{svc=\"checkout\"}[5m]) > 0.02"],
+    ["التوسّع في أوقات الذروة", "يضبط التوسّع التلقائي لتطبيق السائقين وأدوات العمليات لتتحمّل ساعات الذروة، ويجري اختبارات الحمل قبل العطلات الكبرى.", "توسّع تلقائي في Kubernetes + تقرير اختبار الحمل", "kubectl autoscale deployment rider-api \\\n  --min=3 --max=30 --cpu-percent=70"],
+    ["الإطلاق بأمان", "يبني خط CI/CD وإطلاقًا تجريبيًا (Canary) لتصل الميزة إلى 5% من المستخدمين أولًا، مع تراجع تلقائي إذا ارتفعت الأخطاء.", "خط CI/CD + نشر Canary", "- uses: actions/checkout@v4\n- run: docker build -t recs:$GITHUB_SHA .\n- run: helm upgrade recs ./chart --set canary.weight=5"]
+  ],
+  ladder: ["مهندس DevOps / سحابة مبتدئ", "مهندس DevOps", "مهندس DevOps / SRE أول", "مهندس منصات Staff أو مدير DevOps", "رئيس المنصات / مدير البنية التحتية"],
+  move: "<b>مهندس بيانات ← مهندس DevOps / منصات:</b> الانتقال الأقرب؛ أضف الشبكات و Kubernetes والأمن و SRE.",
+  ai: { risk: 30, level: "منخفض إلى متوسط",
+        why: "مساعدو الذكاء الاصطناعي يكتبون سكربتات Bash و Terraform وملفات YAML لخطوط CI/CD بسرعة، وأدوات AIOps تساعد في فرز التنبيهات. لكن لا بد من شخص يصمّم منصات آمنة وموثوقة وفعّالة التكلفة ويتحمّل مسؤولية الحوادث. ومنتجات الذكاء الاصطناعي نفسها تحتاج بنية أكبر (GPU وتقديم النماذج)، لذا فالطلب قوي.",
+        tasks: [["كتابة السكربتات وملفات YAML لخطوط CI/CD", 65, "مساعدو البرمجة يولّدون معظم الكود المتكرر؛ ويراجع الإنسان الأمن والآثار الجانبية."],
+                ["كتابة Terraform / البنية كرمز", 55, "يكتب الذكاء الاصطناعي الوحدات جيدًا؛ لكن الحالة والبيئات ونطاق الأثر تحتاج حكمًا بشريًا."],
+                ["فرز التنبيهات وتحليل السجلات", 45, "أدوات AIOps تجمّع التنبيهات وتقترح الأسباب؛ والإنسان يؤكّد ويقرّر."],
+                ["التوثيق وأدلة التشغيل", 60, "يكتب الذكاء الاصطناعي مسودات أدلة التشغيل من الحوادث والإعدادات."],
+                ["الاستجابة للحوادث والمناوبة", 20, "المساءلة والتنسيق والقرارات الخطرة تحت الضغط تبقى بشرية."],
+                ["تصميم المنصات والمعمارية", 15, "الموازنة بين التكلفة والموثوقية والأمن واحتياجات الفرق."],
+                ["الأمن والامتثال", 15, "اللوائح والمساءلة تبقى مسؤولية البشر."],
+                ["بناء بنية الذكاء الاصطناعي وتعلّم الآلة", 10, "عناقيد GPU وتقديم النماذج و LLMOps مجال سريع النمو."]],
+        shift: { auto: ["السكربتات وملفات YAML المكتوبة يدويًا", "إعداد الخوادم يدويًا", "الفرز الأولي للتنبيهات"],
+                 aug: ["تطوير أسرع للبنية كرمز وخطوط CI/CD", "تحليل الحوادث بمساعدة الذكاء الاصطناعي", "خدمات أكثر لكل مهندس"],
+                 next: ["مهندس منصات", "مهندس موثوقية المواقع (SRE)", "مهندس MLOps / LLMOps", "DevSecOps / مهندس أمن السحابة"] },
+        fp: [["إتقان Kubernetes وتصميم المنصات", 7], ["معرفة الأمن والصلاحيات والامتثال", 6], ["تشغيل بنية الذكاء الاصطناعي (GPU وتقديم النماذج)", 6], ["تحمّل مسؤولية الحوادث وممارسات SRE", 5], ["استخدام مساعدي الذكاء الاصطناعي ومراجعة مخرجاتهم بعين ناقدة", 5]] },
+  aiRows: ["منخفض إلى متوسط", "السكربتات المتكررة، ملفات YAML، البنية كرمز الأساسية، أدلة التشغيل", "تصميم المنصات، مسؤولية الحوادث، الأمن، الموثوقية", "قوي — منتجات الذكاء الاصطناعي تحتاج بنية ومنصات أكثر", "مهندس يكتفي بإعداد الخوادم يدويًا أو نسخ السكربتات", "Kubernetes + الأمن + بنية الذكاء الاصطناعي (MLOps و GPU)"],
+  myth: ["DevOps مجرد مسمّى وظيفي لمن يدير الخوادم.", "DevOps ثقافة ومجموعة ممارسات: الأتمتة و CI/CD والمسؤولية المشتركة بين التطوير والتشغيل. والمهندس يحقّق ذلك بالكود."],
+  quiz: ["إبقاء نظام يعمل لملايين المستخدمين دون أي توقّف", "الشبكات وأنظمة التشغيل والسحابة", "أتمتة كل شيء وإصلاح مشكلات الإنتاج", "Docker / Kubernetes / Terraform", "أتحقّق إن كان خادم أو خدمة متوقّفة", "سكربتات الأتمتة وكود البنية التحتية", "«نطلق 50 مرة يوميًا دون أي توقّف»", "الرياضيات الأساسية تكفيني؛ أفضّل الأنظمة والأتمتة"]
+};
+const DO = AR_ON ? Object.assign({}, DO_EN, DO_AR) : DO_EN;
+ROLES.devops = Object.assign({}, DO_EN.role, AR_ON ? DO_AR.role : {});
+KEYS.push("devops");
 
 /* ---------- NAV ---------- */
 const SECTIONS = AR_ON ? AR.SECTIONS : [
@@ -811,7 +960,8 @@ const ANALOGY = AR_ON ? AR.ANALOGY : {
   da: "<b>The restaurant manager.</b> Reads the sales sheets: which dishes sold, which nights were slow, why Tuesday dipped — and tells the owner.",
   ds: "<b>The R&D chef.</b> Experiments with recipes and predicts what customers will order next week so the kitchen can prepare."
 };
-document.getElementById("analogy").innerHTML = ["de","da","ds"].map(k =>
+ANALOGY.devops = DO.analogy;
+document.getElementById("analogy").innerHTML = ["de","da","ds","devops"].map(k =>
   `<div style="--c:${ROLES[k].color}"><b style="color:${ROLES[k].color}">${ROLES[k].icon} ${ROLES[k].name}</b><br>${ANALOGY[k]}</div>`).join("");
 document.getElementById("questions").innerHTML = KEYS.map(k =>
   `<div style="--c:${ROLES[k].color}"><b style="color:${ROLES[k].color}">${ROLES[k].name}</b><br><span style="font-size:1.1rem">“${ROLES[k].question}”</span></div>`).join("");
@@ -826,6 +976,7 @@ const STAGES = AR_ON ? AR.STAGES : [
   { e:"🚀", t:"Deploy & Operate", o:["de","ds"], d:{ de:"Orchestration (Airflow), monitoring, scaling pipelines; supports ML pipelines (with ML engineers).", ds:"Packages models, works with ML/data engineers to ship and monitor them.", da:"Publishes dashboards and scheduled reports." } },
   { e:"📢", t:"Communicate & Decide", o:["da","ds"], d:{ da:"Core work: dashboards, presentations, recommendations to business stakeholders.", ds:"Explains model results, experiment outcomes and impact.", de:"Documents data contracts & lineage for other teams." } }
 ];
+STAGES.forEach((st, i) => { st.d.devops = DO.stages[i][0]; if (DO.stages[i][1]) st.o.push("devops"); });
 const pipe = document.getElementById("pipe");
 pipe.innerHTML = STAGES.map((s, i) => `
   ${i ? '<div class="arrow">➜</div>' : ''}
@@ -876,14 +1027,15 @@ const ROWS = AR_ON ? AR.ROWS : [
   ["How AI changes the job", "AI", "From report builder → decision partner & AI-output validator", "From pipeline coder → platform architect, incl. AI/RAG data", "From model builder → AI system designer & evaluator"],
   ["Closely related roles", "Career", "BI Analyst, Analytics Engineer, Business Analyst", "Analytics Engineer, Platform Engineer, ML Engineer", "ML Engineer, Research Scientist, Quant, Applied Scientist"]
 ];
+ROWS.forEach((r, i) => r.push(DO.rows[i]));
 const table = document.getElementById("table");
 function renderTable(q = "") {
   const re = q ? new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi") : null;
   const hl = s => re ? s.replace(re, m => `<mark>${m}</mark>`) : s;
   const rows = ROWS.filter(r => !re || r.join(" ").match(re));
   table.innerHTML = `<tr><th>${t("Dimension")}</th>${KEYS.map(k => `<th class="${k}">${ROLES[k].icon} ${ROLES[k].name}</th>`).join("")}</tr>` +
-    (rows.length ? rows.map(r => `<tr><td>${hl(r[0])}<br><span class="catchip">${r[1]}</span></td><td>${hl(r[2])}</td><td>${hl(r[3])}</td><td>${hl(r[4])}</td></tr>`).join("")
-                 : `<tr><td colspan="4" style="text-align:center;color:var(--muted)">${t("No matches")}</td></tr>`);
+    (rows.length ? rows.map(r => `<tr><td>${hl(r[0])}<br><span class="catchip">${r[1]}</span></td>${r.slice(2).map(c => `<td>${hl(c)}</td>`).join("")}</tr>`).join("")
+                 : `<tr><td colspan="${KEYS.length + 1}" style="text-align:center;color:var(--muted)">${t("No matches")}</td></tr>`);
 }
 document.getElementById("search").oninput = e => renderTable(e.target.value.trim());
 renderTable();
@@ -894,7 +1046,8 @@ const SKILLS = AR_ON ? AR.SKILLS : [
   ["Software Eng.", 3, 10, 6], ["Cloud & Infra", 2, 9, 4], ["Data Visualisation", 10, 3, 6],
   ["Business Acumen", 9, 5, 7], ["Communication", 9, 5, 7], ["Data Modelling", 5, 10, 5]
 ];
-const active = { da: true, de: true, ds: true };
+SKILLS.forEach((sk, i) => sk.push(DO.skills[i]));
+const active = { da: true, de: true, ds: true, devops: true };
 function makeFilter(el, onChange) {
   el.innerHTML = KEYS.map(k => `<label><input type="checkbox" data-k="${k}" checked><span class="dot" style="background:${ROLES[k].color}"></span>${ROLES[k].name}</label>`).join("");
   el.querySelectorAll("input").forEach(i => i.onchange = () => onChange(i.dataset.k, i.checked));
@@ -932,7 +1085,9 @@ const TOOLS = {
   "🤖 ML & Statistics": [["pandas / NumPy","da ds"],["scikit-learn","ds"],["PyTorch","ds"],["TensorFlow","ds"],["XGBoost","ds"],["statsmodels","ds da"],["MLflow","ds de"],["Hugging Face","ds"]],
   "☁️ DevOps & Cloud": [["Git","de ds da"],["Docker","de ds"],["Kubernetes","de"],["Terraform","de"],["CI/CD","de"],["AWS / GCP / Azure","de ds"],["Jupyter","ds da"]]
 };
-const toolActive = { da: true, de: true, ds: true };
+Object.values(TOOLS).forEach(list => list.forEach(tl => { if (DO.tools.includes(tl[0])) tl[1] += " devops"; }));
+TOOLS["☁️ DevOps & Cloud"].push(...DO.newTools);
+const toolActive = { da: true, de: true, ds: true, devops: true };
 makeFilter(document.getElementById("toolFilter"), (k, v) => { toolActive[k] = v; renderTools(); });
 function renderTools() {
   document.getElementById("toolGrid").innerHTML = Object.entries(TOOLS).map(([cat, list]) =>
@@ -952,6 +1107,7 @@ const DAY = AR_ON ? AR.DAY : {
   ds: { items: [["09:00","Review overnight model-training results and evaluation metrics."],["10:00","Meet product team about predicting customer churn."],["11:00","Exploratory analysis in Jupyter; engineer features like “days since last order”."],["13:00","Lunch & read a paper on a new forecasting technique."],["14:00","Train & compare models (logistic regression vs gradient boosting); tune hyperparameters."],["15:30","Design an A/B test to measure if targeted offers reduce churn."],["17:00","Sync with ML engineer about deploying the model behind an API."]],
         love: "Research, experimentation, and building things that predict the future.", hard: "Models that never reach production; unclear problem framing; data that isn't ready." }
 };
+DAY.devops = DO.day;
 const dayTabs = document.getElementById("dayTabs");
 dayTabs.innerHTML = KEYS.map((k, i) => `<button style="--c:${ROLES[k].color}" class="${i ? "" : "active"}" data-k="${k}">${ROLES[k].icon} ${ROLES[k].name}</button>`).join("");
 function showDay(k) {
@@ -977,6 +1133,7 @@ const SCEN = AR_ON ? AR.SCEN : [
     de: ["Serve the data fast", "Builds the event tracking, feature pipelines and low-latency store so recommendations can be served in milliseconds.", "Event tracking + feature store + API", "redis.hset(f'user:{uid}:features', mapping=features)"],
     ds: ["Build the recommender", "Develops a collaborative-filtering / embedding model of item similarity and evaluates offline before an online A/B test.", "Recommendation model + offline/online evaluation", "from implicit.als import AlternatingLeastSquares\nmodel = AlternatingLeastSquares(factors=64)\nmodel.fit(user_item_matrix)"] }
 ];
+SCEN.forEach((sc, i) => sc.devops = DO.scen[i]);
 const sel = document.getElementById("scenSelect");
 sel.innerHTML = SCEN.map((s, i) => `<option value="${i}">${s.t}</option>`).join("");
 function showScen(i) {
@@ -997,8 +1154,10 @@ const LADDERS = AR_ON ? AR.LADDERS : {
   de: ["Junior Data Engineer","Data Engineer","Senior Data Engineer","Staff / Principal Engineer or DE Manager","Head of Data Platform / Data Architect"],
   ds: ["Junior / Associate Data Scientist","Data Scientist","Senior Data Scientist","Staff / Principal DS or DS Manager","Head of Data Science / Chief Data Officer"]
 };
+LADDERS.devops = DO.ladder;
 document.getElementById("ladders").innerHTML = KEYS.map(k => `<div class="ladder" style="--c:${ROLES[k].color}"><h4>${ROLES[k].icon} ${ROLES[k].name}</h4>${LADDERS[k].map((r, i) => `<div class="rung"><b>${i + 1}</b>${r}</div>`).join("")}</div>`).join("");
 const METERS = AR_ON ? AR.METERS : [["Entry barrier", 2, 4, 5], ["Starting pay", 2, 4, 4], ["Senior pay ceiling", 3, 5, 5], ["Market demand", 4, 5, 4], ["Coding intensity", 2, 5, 4], ["Math intensity", 2, 1, 5], ["Stakeholder contact", 5, 2, 4]];
+METERS.forEach((m, i) => m.push(DO.meters[i]));
 document.getElementById("meters").innerHTML = METERS.map(([l, ...v]) => `<div style="margin-bottom:8px"><b style="font-size:.9rem">${l}</b>` +
   KEYS.map((k, i) => `<div class="meter" style="--c:${ROLES[k].color}"><span class="m-l">${ROLES[k].name}</span><span class="m-b">${[1,2,3,4,5].map(n => `<span class="${n <= v[i] ? "on" : ""}"></span>`).join("")}</span></div>`).join("") + `</div>`).join("");
 document.getElementById("moves").innerHTML = (AR_ON ? AR.MOVES : [
@@ -1054,6 +1213,8 @@ const AI = AR_ON ? AR.AI : {
                  next: ["Applied AI / GenAI Scientist", "AI Evaluation Scientist", "ML Engineer", "Causal Inference / Experimentation Specialist"] },
         fp: [["Experimentation & causal inference", 9], ["LLM fine-tuning, prompting & evaluation", 9], ["Ship models to production (MLOps)", 8], ["Strong business problem framing", 8], ["Responsible AI (bias, fairness, safety)", 6]] }
 };
+document.getElementById("moves").insertAdjacentHTML("beforeend", `<li style="margin-bottom:6px">${DO.move}</li>`);
+AI.devops = DO.ai;
 const riskColor = v => v >= 55 ? "#ef4444" : v >= 35 ? "#f59e0b" : "#22c55e";
 function arc(a, b, col) {
   const p = t => [110 - 90 * Math.cos(Math.PI * t), 110 - 90 * Math.sin(Math.PI * t)];
@@ -1113,8 +1274,9 @@ const AI_ROWS = AR_ON ? AR.AI_ROWS : [
   ["Most at-risk profile", "Junior analyst doing only recurring reports", "Engineer only writing simple, repetitive SQL jobs", "Modeller who only trains standard models on clean data"],
   ["Key skill to add now", "Domain expertise + dbt/semantic layer + AI copilots", "RAG/vector pipelines, platform & system design", "LLM evaluation, MLOps, causal inference"]
 ];
+AI_ROWS.forEach((r, i) => r.push(DO.aiRows[i]));
 document.getElementById("aiTable").innerHTML = `<tr><th>${t("AI angle")}</th>${KEYS.map(k => `<th class="${k}">${ROLES[k].icon} ${ROLES[k].name}</th>`).join("")}</tr>` +
-  AI_ROWS.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join("");
+  AI_ROWS.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("");
 
 /* ---------- LEARNING PATHS (v2) ---------- */
 const LP_EN = {
@@ -1789,6 +1951,7 @@ const MYTHS = AR_ON ? AR.MYTHS : [
   ["AI will replace data analysts.", "AI speeds up querying and charting, but understanding the business, validating numbers and influencing people remain human work."],
   ["These are three completely separate jobs.", "Boundaries overlap. In startups one person often does all three; titles also vary widely between companies."]
 ];
+MYTHS.push(DO.myth);
 document.getElementById("flips").innerHTML = MYTHS.map(([m, r]) => `<div class="flip" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
   <div class="face front"><span class="lbl">${t("MYTH")}</span><p style="font-size:1.05rem">${m}</p><span style="color:var(--muted);font-size:.8rem">${t("click to reveal ↻")}</span></div>
   <div class="face back"><span class="lbl">${t("REALITY")}</span><p style="font-size:.95rem">${r}</p></div></div></div>`).join("");
@@ -1804,7 +1967,8 @@ const QUIZ = AR_ON ? AR.QUIZ : [
   ["Your ideal achievement:", [["“Our sales strategy changed because of my analysis”","da"],["“Our data platform never goes down”","de"],["“My model raised revenue 5%”","ds"]]],
   ["How do you feel about maths?", [["Comfortable with basics, I'd rather focus on business","da"],["It's fine, but I love building things more","de"],["I love probability, linear algebra and proofs","ds"]]]
 ];
-let qi = 0, score = { da: 0, de: 0, ds: 0 };
+QUIZ.forEach((q, i) => q[1].push([DO.quiz[i], "devops"]));
+let qi = 0, score = { da: 0, de: 0, ds: 0, devops: 0 };
 const qb = document.getElementById("quizBox");
 function renderQuiz() {
   if (qi >= QUIZ.length) return renderResult();
@@ -1824,7 +1988,7 @@ function renderResult() {
     ${KEYS.map(k => `<div class="result-bar" style="--c:${ROLES[k].color}"><span class="n">${ROLES[k].name}</span><div class="t"><div data-w="${score[k] / QUIZ.length * 100}%"></div></div><span>${Math.round(score[k] / QUIZ.length * 100)}%</span></div>`).join("")}
     <div style="text-align:center"><button class="btn" id="retry">${t("Retake quiz")}</button></div>`;
   requestAnimationFrame(() => qb.querySelectorAll(".t div").forEach(d => d.style.width = d.dataset.w));
-  document.getElementById("retry").onclick = () => { qi = 0; score = { da: 0, de: 0, ds: 0 }; renderQuiz(); };
+  document.getElementById("retry").onclick = () => { qi = 0; score = { da: 0, de: 0, ds: 0, devops: 0 }; renderQuiz(); };
 }
 renderQuiz();
 </script>
