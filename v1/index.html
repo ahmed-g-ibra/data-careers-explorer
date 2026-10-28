@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Analyst vs Data Engineer vs Data Scientist</title>
+<style>
+  :root {
+    --bg: #0f1220; --panel: #171b2e; --panel2: #1f2440; --text: #e8eaf6; --muted: #9aa0c3;
+    --line: #2c3256;
+    --da: #3ba7ff; --de: #ff8a3d; --ds: #b46cff;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+  a { color: inherit; }
+  header { padding: 48px 24px 24px; text-align: center; background: radial-gradient(ellipse at top, #262c55 0%, var(--bg) 70%); }
+  header h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 4vw, 2.8rem); }
+  header h1 .da { color: var(--da); } header h1 .de { color: var(--de); } header h1 .ds { color: var(--ds); }
+  header p { color: var(--muted); max-width: 720px; margin: 0 auto; }
+  nav { position: sticky; top: 0; z-index: 10; display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; padding: 10px; background: rgba(15,18,32,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  nav button { background: var(--panel); color: var(--text); border: 1px solid var(--line); padding: 8px 14px; border-radius: 999px; cursor: pointer; font-size: .9rem; }
+  nav button.active, nav button:hover { background: var(--panel2); border-color: #4a5290; }
+  main { max-width: 1150px; margin: 0 auto; padding: 24px; }
+  section { display: none; animation: fade .35s ease; }
+  section.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  h2 { margin-top: 0; }
+  .sub { color: var(--muted); margin-top: -8px; margin-bottom: 20px; }
+
+  /* Role filter */
+  .rolefilter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+  .rolefilter label { display: flex; align-items: center; gap: 6px; background: var(--panel); border: 1px solid var(--line); padding: 6px 12px; border-radius: 8px; cursor: pointer; user-select: none; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+  /* Cards */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 22px; border-top: 4px solid var(--c); cursor: pointer; transition: transform .2s, box-shadow .2s; position: relative; }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+  .card .icon { font-size: 2.2rem; }
+  .card h3 { margin: 8px 0 4px; color: var(--c); }
+  .card .tag { font-style: italic; color: var(--muted); margin-bottom: 10px; }
+  .card .more { display: none; margin-top: 12px; border-top: 1px dashed var(--line); padding-top: 12px; font-size: .93rem; }
+  .card.open .more { display: block; }
+  .card .hint { position: absolute; top: 14px; right: 16px; font-size: .75rem; color: var(--muted); }
+  .card ul { padding-left: 18px; margin: 6px 0; }
+  .analogy { margin-top: 26px; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
+  .analogy-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 10px; }
+  .analogy-row div { background: var(--panel2); border-radius: 10px; padding: 14px; border-left: 4px solid var(--c); }
+
+  /* Pipeline */
+  .pipeline { display: flex; align-items: stretch; gap: 0; overflow-x: auto; padding: 10px 0 20px; }
+  .stage { flex: 1 0 150px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; text-align: center; cursor: pointer; transition: all .25s; position: relative; }
+  .stage .emoji { font-size: 1.8rem; }
+  .stage h4 { margin: 6px 0; }
+  .stage .owners { display: flex; justify-content: center; gap: 5px; margin-top: 8px; }
+  .stage .owners span { width: 12px; height: 12px; border-radius: 50%; }
+  .stage.dim { opacity: .25; }
+  .stage.sel { border-color: #fff; box-shadow: 0 0 0 2px rgba(255,255,255,.2); }
+  .arrow { flex: 0 0 28px; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 1.4rem; }
+  .pipe-detail { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; min-height: 90px; }
+  .pipe-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .pipe-btns button { border: 2px solid var(--c); background: transparent; color: var(--text); padding: 7px 14px; border-radius: 8px; cursor: pointer; }
+  .pipe-btns button.active { background: var(--c); color: #111; font-weight: 600; }
+
+  /* Table */
+  .search { width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); color: var(--text); font-size: 1rem; margin-bottom: 14px; }
+  .tablewrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--line); }
+  table { width: 100%; border-collapse: collapse; min-width: 760px; }
+  th, td { padding: 12px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); font-size: .93rem; }
+  th { background: var(--panel2); position: sticky; top: 0; }
+  th.da { color: var(--da); } th.de { color: var(--de); } th.ds { color: var(--ds); }
+  td:first-child { font-weight: 600; color: var(--muted); width: 160px; background: var(--panel); }
+  tr:hover td { background: #1c2140; }
+  .catchip { display: inline-block; font-size: .7rem; padding: 2px 7px; border-radius: 6px; background: #2b3160; color: var(--muted); margin-top: 4px; font-weight: 400; }
+  mark { background: #ffe06655; color: inherit; border-radius: 3px; }
+
+  /* Skills */
+  .skills-grid { display: grid; grid-template-columns: minmax(300px, 1fr) 1fr; gap: 24px; align-items: start; }
+  @media (max-width: 820px) { .skills-grid { grid-template-columns: 1fr; } }
+  .radar-box { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 14px; }
+  .bars { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 18px; }
+  .bar-row { margin-bottom: 14px; }
+  .bar-row .lbl { font-size: .9rem; margin-bottom: 4px; display: flex; justify-content: space-between; }
+  .bar-track { display: flex; flex-direction: column; gap: 3px; }
+  .bar { height: 8px; border-radius: 4px; background: var(--c); transition: width .6s ease; }
+  .radar-poly { transition: opacity .3s; }
+
+  /* Tools */
+  .tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+  .toolcat { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+  .toolcat h4 { margin: 0 0 10px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; margin: 4px 4px 0 0; padding: 5px 10px; border-radius: 999px; background: var(--panel2); font-size: .85rem; border: 1px solid var(--line); transition: opacity .25s; }
+  .chip .dots { display: inline-flex; gap: 3px; }
+  .chip .dots i { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+  .chip.dim { opacity: .18; }
+
+  /* Day in life */
+  .day-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .day-tabs button { border: 2px solid var(--c); background: transparent; color: var(--text); padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: .95rem; }
+  .day-tabs button.active { background: var(--c); color: #111; font-weight: 600; }
+  .timeline { border-left: 3px solid var(--c); margin-left: 10px; padding-left: 22px; }
+  .tl-item { position: relative; margin-bottom: 18px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; }
+  .tl-item::before { content: ""; position: absolute; left: -31px; top: 16px; width: 14px; height: 14px; border-radius: 50%; background: var(--c); border: 3px solid var(--bg); }
+  .tl-item .time { font-weight: 700; color: var(--c); }
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
+  @media (max-width: 700px) { .split { grid-template-columns: 1fr; } }
+  .split div { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+
+  /* Example problem */
+  .scenario { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 20px; margin-bottom: 18px; }
+  .scenario select { background: var(--panel2); color: var(--text); border: 1px solid var(--line); padding: 8px 12px; border-radius: 8px; font-size: .95rem; }
+  .answers { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .answer { background: var(--panel2); border-radius: 12px; padding: 16px; border-top: 4px solid var(--c); }
+  .answer h4 { margin: 0 0 6px; color: var(--c); }
+  .answer .deliv { margin-top: 10px; font-size: .85rem; color: var(--muted); }
+  pre { background: #0b0e1a; padding: 10px; border-radius: 8px; overflow-x: auto; font-size: .8rem; margin: 8px 0 0; }
+
+  /* Career */
+  .career { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+  .ladder { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; border-top: 4px solid var(--c); }
+  .ladder h4 { color: var(--c); margin: 0 0 10px; }
+  .rung { display: flex; align-items: center; gap: 10px; padding: 8px 10px; margin-bottom: 6px; background: var(--panel2); border-radius: 8px; font-size: .9rem; }
+  .rung b { min-width: 22px; height: 22px; border-radius: 50%; background: var(--c); color: #111; display: inline-flex; align-items: center; justify-content: center; font-size: .75rem; }
+  .moves { margin-top: 18px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+  .meter { display: flex; align-items: center; gap: 10px; margin: 8px 0; font-size: .9rem; }
+  .meter .m-l { width: 150px; color: var(--muted); }
+  .meter .m-b { flex: 1; display: flex; gap: 4px; }
+  .meter .m-b span { flex: 1; height: 10px; border-radius: 3px; background: #2b3160; }
+  .meter .m-b span.on { background: var(--c); }
+
+  /* Quiz */
+  .quiz { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 24px; max-width: 760px; margin: 0 auto; }
+  .progress { height: 6px; background: var(--panel2); border-radius: 3px; overflow: hidden; margin-bottom: 18px; }
+  .progress div { height: 100%; background: linear-gradient(90deg, var(--da), var(--ds), var(--de)); transition: width .3s; }
+  .q { font-size: 1.15rem; font-weight: 600; margin-bottom: 14px; }
+  .opt { display: block; width: 100%; text-align: left; background: var(--panel2); color: var(--text); border: 1px solid var(--line); padding: 12px 16px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; font-size: .97rem; transition: border-color .2s, transform .1s; }
+  .opt:hover { border-color: #6a74c9; transform: translateX(3px); }
+  .result-bar { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+  .result-bar .n { width: 130px; }
+  .result-bar .t { flex: 1; height: 18px; background: var(--panel2); border-radius: 9px; overflow: hidden; }
+  .result-bar .t div { height: 100%; background: var(--c); width: 0; transition: width 1s ease; }
+  .btn { background: linear-gradient(90deg, var(--da), var(--ds)); color: #fff; border: 0; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-size: 1rem; font-weight: 600; margin-top: 12px; }
+
+  /* Myths */
+  .flip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .flip { perspective: 1000px; height: 190px; cursor: pointer; }
+  .flip-inner { position: relative; width: 100%; height: 100%; transition: transform .6s; transform-style: preserve-3d; }
+  .flip.flipped .flip-inner { transform: rotateY(180deg); }
+  .face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; justify-content: center; border: 1px solid var(--line); }
+  .front { background: var(--panel); }
+  .front .lbl { font-size: .75rem; color: #ff6b6b; font-weight: 700; letter-spacing: .08em; }
+  .back { background: var(--panel2); transform: rotateY(180deg); }
+  .back .lbl { font-size: .75rem; color: #4ade80; font-weight: 700; letter-spacing: .08em; }
+
+  /* AI impact */
+  section#ai h3 { margin-top: 30px; }
+  .gauges { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .gauge { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 16px; text-align: center; border-top: 4px solid var(--c); }
+  .gauge h4 { margin: 0; color: var(--c); }
+  .gauge .lvl { font-size: 1.2rem; font-weight: 700; margin-top: -6px; }
+  .gauge .why { font-size: .88rem; color: var(--muted); text-align: left; margin-top: 8px; }
+  .gauge .needle { transition: transform 1.2s cubic-bezier(.3,1.4,.5,1); transform-origin: 110px 110px; }
+  .ai-legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: .82rem; color: var(--muted); margin-bottom: 12px; }
+  .ai-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; }
+  .task { display: grid; grid-template-columns: minmax(180px, 280px) 1fr 50px; gap: 12px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; cursor: pointer; }
+  .task .tb { height: 12px; background: var(--panel2); border-radius: 6px; overflow: hidden; }
+  .task .tb div { height: 100%; width: 0; transition: width .8s ease; border-radius: 6px; }
+  .task .note { grid-column: 1 / -1; display: none; font-size: .87rem; color: var(--muted); }
+  .task.open .note { display: block; }
+  .shift-list { margin: 6px 0 0; padding-left: 18px; font-size: .9rem; }
+  .fp-box { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .fp-box label { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-bottom: 1px dashed var(--line); cursor: pointer; }
+  .fp-meter { height: 16px; background: var(--panel2); border-radius: 8px; overflow: hidden; margin: 8px 0 14px; }
+  .fp-meter div { height: 100%; transition: width .5s, background .5s; }
+
+  /* Language toggle & RTL */
+  header { position: relative; }
+  .langbtn { position: absolute; top: 14px; right: 16px; background: var(--panel2); color: var(--text); border: 1px solid #4a5290; padding: 7px 14px; border-radius: 999px; cursor: pointer; font-size: .9rem; }
+  .langbtn:hover { background: #2b3160; }
+  [dir=rtl] body { font-family: "Segoe UI", Tahoma, "Noto Sans Arabic", sans-serif; }
+  [dir=rtl] .langbtn { right: auto; left: 16px; }
+  [dir=rtl] th, [dir=rtl] td { text-align: right; }
+  [dir=rtl] .card .hint { right: auto; left: 16px; }
+  [dir=rtl] .card ul, [dir=rtl] .shift-list, [dir=rtl] #moves { padding-left: 0; padding-right: 18px; }
+  [dir=rtl] .analogy-row div { border-left: 0; border-right: 4px solid var(--c); }
+  [dir=rtl] .timeline { border-left: 0; border-right: 3px solid var(--c); margin-left: 0; margin-right: 10px; padding-left: 0; padding-right: 22px; }
+  [dir=rtl] .tl-item::before { left: auto; right: -31px; }
+  [dir=rtl] .arrow { transform: scaleX(-1); }
+  [dir=rtl] .opt { text-align: right; }
+  [dir=rtl] .opt:hover { transform: translateX(-3px); }
+  [dir=rtl] pre { direction: ltr; text-align: left; }
+  [dir=rtl] .gauge svg { direction: ltr; }
+
+  footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 30px; }
+</style>
+</head>
+<body>
+
+<header>
+  <button class="langbtn" id="langBtn">العربية</button>
+  <h1><span class="da">Data Analyst</span> vs <span class="de">Data Engineer</span> vs <span class="ds">Data Scientist</span></h1>
+  <p>Three roles that all "work with data" — but ask different questions, use different tools, and produce different things. Explore every angle below.</p>
+</header>
+
+<nav id="nav"></nav>
+
+<main>
+  <!-- OVERVIEW -->
+  <section id="overview" class="active">
+    <h2>At a glance</h2>
+    <p class="sub">Click a card to expand it.</p>
+    <div class="cards" id="cards"></div>
+    <div class="analogy">
+      <h3 style="margin:0">🍽️ The restaurant analogy</h3>
+      <div class="analogy-row" id="analogy"></div>
+    </div>
+    <div class="analogy">
+      <h3 style="margin:0">❓ The core question each role answers</h3>
+      <div class="analogy-row" id="questions"></div>
+    </div>
+  </section>
+
+  <!-- PIPELINE -->
+  <section id="pipeline">
+    <h2>Where each role lives in the data lifecycle</h2>
+    <p class="sub">Pick a role to highlight its stages, or click any stage for details.</p>
+    <div class="pipe-btns" id="pipeBtns"></div>
+    <div class="pipeline" id="pipe"></div>
+    <div class="pipe-detail" id="pipeDetail">Click a stage to see who does what there.</div>
+  </section>
+
+  <!-- COMPARE -->
+  <section id="compare">
+    <h2>Side-by-side comparison</h2>
+    <p class="sub">Every dimension, one table. Search to filter rows.</p>
+    <input class="search" id="search" placeholder="Search e.g. SQL, salary, degree, stakeholders…">
+    <div class="tablewrap"><table id="table"></table></div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <h2>Skills profile</h2>
+    <p class="sub">Relative emphasis on a 0–10 scale. Toggle roles to compare.</p>
+    <div class="rolefilter" id="skillFilter"></div>
+    <div class="skills-grid">
+      <div class="radar-box"><svg id="radar" viewBox="0 0 440 440" width="100%"></svg></div>
+      <div class="bars" id="bars"></div>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section id="tools">
+    <h2>Tools & tech stack</h2>
+    <p class="sub">Coloured dots show who typically uses each tool. Filter by role to fade the rest.</p>
+    <div class="rolefilter" id="toolFilter"></div>
+    <div class="tools" id="toolGrid"></div>
+  </section>
+
+  <!-- DAY -->
+  <section id="day">
+    <h2>A day in the life</h2>
+    <p class="sub">A typical (idealised) workday.</p>
+    <div class="day-tabs" id="dayTabs"></div>
+    <div id="dayContent"></div>
+  </section>
+
+  <!-- SCENARIO -->
+  <section id="scenario">
+    <h2>Same problem, three approaches</h2>
+    <p class="sub">Choose a business problem and see how each role would tackle it.</p>
+    <div class="scenario">
+      <label><span id="scenLbl">Business problem:</span>&nbsp;
+        <select id="scenSelect"></select>
+      </label>
+      <p id="scenDesc" style="color:var(--muted);margin-bottom:0"></p>
+    </div>
+    <div class="answers" id="scenAnswers"></div>
+  </section>
+
+  <!-- CAREER -->
+  <section id="career">
+    <h2>Career, education & market</h2>
+    <p class="sub">Typical ladders and how the roles compare on entry barrier, pay and more.</p>
+    <div class="career" id="ladders"></div>
+    <div class="moves">
+      <h3 style="margin-top:0">📊 Relative comparison (1–5)</h3>
+      <div id="meters"></div>
+      <p style="color:var(--muted);font-size:.82rem;margin-bottom:0">Indicative only — varies a lot by country, company size and industry.</p>
+    </div>
+    <div class="moves">
+      <h3 style="margin-top:0">🔀 Common career moves</h3>
+      <ul id="moves"></ul>
+    </div>
+  </section>
+
+  <!-- AI IMPACT -->
+  <section id="ai">
+    <h2>🤖 How AI affects each role — and the career risk</h2>
+    <p class="sub">AI rarely replaces a whole job at once; it automates <i>tasks</i>. The risk depends on how much of your week is made of easily automated tasks.</p>
+    <div class="gauges" id="gauges"></div>
+
+    <h3>Task-by-task exposure</h3>
+    <p class="sub">Pick a role. Each bar shows how much AI can already do that task (estimated).</p>
+    <div class="day-tabs" id="aiTabs"></div>
+    <div class="ai-legend"><span><i style="background:#ef4444"></i>Largely automatable</span><span><i style="background:#f59e0b"></i>AI-assisted (human still needed)</span><span><i style="background:#22c55e"></i>Mostly human</span></div>
+    <div id="aiTasks"></div>
+
+    <h3>What changes for each role</h3>
+    <div class="answers" id="aiShift"></div>
+
+    <h3>Future-proof yourself</h3>
+    <p class="sub">Tick the habits you already have to see your personal risk drop.</p>
+    <div class="day-tabs" id="fpTabs"></div>
+    <div class="fp-box" id="fpBox"></div>
+
+    <h3>Side-by-side summary</h3>
+    <div class="tablewrap"><table id="aiTable"></table></div>
+    <p style="color:var(--muted);font-size:.82rem">Risk levels and percentages are the author's estimates of the current state of AI tools (2026), for orientation only — not forecasts. Impact varies by company, industry and seniority: junior, repetitive work is the most exposed in every role.</p>
+  </section>
+
+  <!-- MYTHS -->
+  <section id="myths">
+    <h2>Myths vs reality</h2>
+    <p class="sub">Click a card to flip it.</p>
+    <div class="flip-grid" id="flips"></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz">
+    <h2>Which role fits you?</h2>
+    <p class="sub">8 quick questions. No wrong answers.</p>
+    <div class="quiz" id="quizBox"></div>
+  </section>
+</main>
+
+<footer>Built as a learning resource. Role boundaries blur in practice — especially in small teams, where one person may wear all three hats.</footer>
+
+<script>
+// Arabic translations for index.html. Loaded before the main script; used when the Arabic option is on.
+window.AR = {
+  title: "محلل البيانات مقابل مهندس البيانات مقابل عالم البيانات",
+
+  ROLES: {
+    da: { name: "محلل البيانات", short: "المحلل", tag: "يحوّل البيانات إلى رؤى وقرارات",
+          summary: "يستكشف البيانات الموجودة ليشرح ما حدث ولماذا، ثم يعرض النتائج عبر التقارير ولوحات المعلومات والتوصيات.",
+          focus: ["التحليل الوصفي والتشخيصي", "مؤشرات الأداء (KPIs) ولوحات المعلومات والتقارير", "الإجابة عن أسئلة العمل الطارئة", "سرد القصص بالبيانات لأصحاب القرار"],
+          output: "لوحات معلومات، تقارير، عروض تقديمية، توصيات",
+          question: "ماذا حدث، ولماذا؟" },
+    de: { name: "مهندس البيانات", short: "المهندس", tag: "يبني الطرق التي تسير عليها البيانات",
+          summary: "يصمّم ويبني ويصون الأنظمة التي تجمع البيانات وتنقلها وتخزّنها وتنظّفها، لتكون موثوقة ومتاحة على نطاق واسع.",
+          focus: ["خطوط البيانات (ETL/ELT)", "مستودعات وبحيرات البيانات", "جودة البيانات وموثوقيتها وقابليتها للتوسّع", "البنية التحتية وجدولة المهام"],
+          output: "خطوط بيانات، نماذج بيانات، مستودعات، واجهات API، منصات",
+          question: "كيف نوصل البيانات الصحيحة، بموثوقية، إلى حيث نحتاجها؟" },
+    ds: { name: "عالم البيانات", short: "العالِم", tag: "يتنبّأ ويؤتمت باستخدام النماذج",
+          summary: "يستخدم الإحصاء وتعلّم الآلة للتنبّؤ بما سيحدث، وإجراء التجارب، وبناء نماذج تشغّل المنتجات.",
+          focus: ["النمذجة التنبؤية وتعلّم الآلة", "الإحصاء والتجارب (A/B)", "هندسة الخصائص (Feature engineering)", "البحث وبناء النماذج الأولية"],
+          output: "نماذج تعلّم آلة، توقّعات، تجارب، نتائج بحثية",
+          question: "ماذا سيحدث، وماذا يجب أن نفعل حياله؟" }
+  },
+
+  // [selector, html] — an array of html fills every match in order
+  static: [
+    ["header h1", '<span class="da">محلل البيانات</span> مقابل <span class="de">مهندس البيانات</span> مقابل <span class="ds">عالم البيانات</span>'],
+    ["header p", "ثلاثة أدوار كلها \"تعمل بالبيانات\"، لكنها تطرح أسئلة مختلفة، وتستخدم أدوات مختلفة، وتنتج مخرجات مختلفة. استكشف كل الجوانب أدناه."],
+    ["#overview h2", "نظرة سريعة"],
+    ["#overview .sub", "انقر على أي بطاقة لعرض التفاصيل."],
+    ["#overview .analogy h3", ["🍽️ تشبيه المطعم", "❓ السؤال الأساسي الذي يجيب عنه كل دور"]],
+    ["#pipeline h2", "موقع كل دور في دورة حياة البيانات"],
+    ["#pipeline .sub", "اختر دورًا لتمييز مراحله، أو انقر على أي مرحلة لرؤية التفاصيل."],
+    ["#pipeDetail", "انقر على مرحلة لترى ما يقوم به كل دور فيها."],
+    ["#compare h2", "مقارنة جنبًا إلى جنب"],
+    ["#compare .sub", "كل الجوانب في جدول واحد. ابحث لتصفية الصفوف."],
+    ["#skills h2", "ملف المهارات"],
+    ["#skills .sub", "درجة التركيز النسبية على مقياس من 0 إلى 10. فعّل أو أوقف الأدوار للمقارنة."],
+    ["#tools h2", "الأدوات والتقنيات"],
+    ["#tools .sub", "النقاط الملوّنة توضّح من يستخدم كل أداة عادةً. صفِّ حسب الدور لإخفاء الباقي."],
+    ["#day h2", "يوم في حياة كل دور"],
+    ["#day .sub", "يوم عمل نموذجي (مثالي)."],
+    ["#scenario h2", "المشكلة نفسها، ثلاث طرق للحل"],
+    ["#scenario .sub", "اختر مشكلة عمل وشاهد كيف يتعامل معها كل دور."],
+    ["#scenLbl", "مشكلة العمل:"],
+    ["#career h2", "المسار المهني والتعليم والسوق"],
+    ["#career .sub", "السلّم الوظيفي المعتاد، ومقارنة الأدوار في صعوبة الدخول والأجر وغيرها."],
+    ["#career .moves h3", ["📊 مقارنة نسبية (1–5)", "🔀 انتقالات مهنية شائعة"]],
+    ["#career .moves p", "للاسترشاد فقط — تختلف كثيرًا حسب الدولة وحجم الشركة والقطاع."],
+    ["#ai h2", "🤖 كيف يؤثّر الذكاء الاصطناعي على كل دور — ومخاطره على المسار المهني"],
+    ["#ai .sub", [
+      "نادرًا ما يستبدل الذكاء الاصطناعي وظيفة كاملة دفعة واحدة؛ بل يؤتمت <i>مهام</i>. يعتمد الخطر على نسبة المهام القابلة للأتمتة في أسبوع عملك.",
+      "اختر دورًا. يوضّح كل شريط إلى أي مدى يستطيع الذكاء الاصطناعي حاليًا أداء تلك المهمة (تقديري).",
+      "ضع علامة على العادات والمهارات التي تملكها لترى انخفاض خطرك الشخصي."]],
+    ["#ai h3", ["التعرّض للأتمتة مهمةً بمهمة", "ما الذي يتغيّر في كل دور", "احمِ مستقبلك المهني", "ملخّص جنبًا إلى جنب"]],
+    [".ai-legend", '<span><i style="background:#ef4444"></i>قابلة للأتمتة إلى حد كبير</span><span><i style="background:#f59e0b"></i>بمساعدة الذكاء الاصطناعي (الإنسان ما زال ضروريًا)</span><span><i style="background:#22c55e"></i>بشرية في الغالب</span>'],
+    ["#ai > p:last-child", "مستويات الخطر والنسب تقديرات المؤلف لوضع أدوات الذكاء الاصطناعي الحالي (2026)، للاسترشاد فقط وليست توقّعات. يختلف الأثر حسب الشركة والقطاع ومستوى الخبرة: العمل المبتدئ والمتكرر هو الأكثر عرضة في كل الأدوار."],
+    ["#myths h2", "خرافات مقابل الواقع"],
+    ["#myths .sub", "انقر على البطاقة لقلبها."],
+    ["#quiz h2", "أي دور يناسبك؟"],
+    ["#quiz .sub", "8 أسئلة سريعة. لا توجد إجابات خاطئة."],
+    ["footer", "صُمّمت كمصدر تعليمي. الحدود بين الأدوار متداخلة في الواقع — خصوصًا في الفرق الصغيرة حيث قد يؤدي شخص واحد الأدوار الثلاثة."]
+  ],
+
+  ui: {
+    "click ▾": "انقر ▾", "Focus areas": "مجالات التركيز", "Main output:": "المخرجات الرئيسية:",
+    "★ = primary owner of this stage": "★ = المسؤول الرئيسي عن هذه المرحلة", "All roles": "كل الأدوار",
+    "Search e.g. SQL, salary, degree, stakeholders…": "ابحث مثلًا: SQL، الراتب، الشهادة، أصحاب القرار…",
+    "Dimension": "الجانب", "No matches": "لا توجد نتائج",
+    "💚 What people love": "💚 ما يحبه العاملون فيه", "😓 What's hard": "😓 ما هو صعب",
+    "📦 Deliverable:": "📦 المُخرَج:", "MYTH": "خرافة", "REALITY": "الواقع", "click to reveal ↻": "انقر للكشف ↻",
+    "Question": "السؤال", "of": "من", "You lean towards:": "أنت تميل إلى:", "Retake quiz": "أعد الاختبار",
+    "Career risk:": "الخطر المهني:", "Click a task for the reasoning.": "انقر على المهمة لمعرفة السبب.",
+    "⬇ Shrinking": "⬇ يتقلّص", "⚡ Supercharged by AI": "⚡ يتسارع بالذكاء الاصطناعي", "⬆ Growing / new roles": "⬆ ينمو / أدوار جديدة",
+    "Your estimated risk:": "خطرك التقديري:", "— high": "— مرتفع", "— moderate": "— متوسط", "— low": "— منخفض",
+    "AI angle": "جانب الذكاء الاصطناعي",
+    "💾 Languages": "💾 لغات البرمجة", "📈 BI & Visualisation": "📈 ذكاء الأعمال والتصوير المرئي",
+    "⚙️ Processing & Orchestration": "⚙️ المعالجة وجدولة المهام", "🏛️ Storage & Warehouses": "🏛️ التخزين والمستودعات",
+    "🤖 ML & Statistics": "🤖 تعلّم الآلة والإحصاء", "☁️ DevOps & Cloud": "☁️ DevOps والسحابة"
+  },
+
+  SECTIONS: [["overview","نظرة عامة"],["pipeline","دورة البيانات"],["compare","مقارنة شاملة"],["skills","المهارات"],
+    ["tools","الأدوات"],["day","يوم في الحياة"],["scenario","نفس المشكلة"],["career","المسار والأجر"],
+    ["ai","🤖 أثر الذكاء الاصطناعي"],["myths","خرافات"],["quiz","أيّها يناسبني؟"]],
+
+  ANALOGY: {
+    de: "<b>بنّاء المطبخ وسلسلة التوريد.</b> يوفّر المكوّنات، ويبني المطبخ والتمديدات والثلاجات حتى يصل كل شيء طازجًا وفي وقته.",
+    da: "<b>مدير المطعم.</b> يقرأ تقارير المبيعات: أي الأطباق بيعت، وأي الليالي كانت هادئة، ولماذا انخفضت مبيعات الثلاثاء — ثم يخبر المالك.",
+    ds: "<b>طاهي البحث والتطوير.</b> يجرّب وصفات جديدة ويتنبّأ بما سيطلبه الزبائن الأسبوع القادم ليستعد المطبخ."
+  },
+
+  STAGES: [
+    { e:"📥", t:"الجمع", o:["de"], d:{ de:"يربط المصادر (التطبيقات، واجهات API، السجلات، الأطراف الخارجية)، ويبني مهام الاستيعاب والبث المباشر (Kafka) والتحميل الدفعي.", da:"نادرًا ما يشارك؛ قد يطلب مصادر بيانات جديدة.", ds:"قد يحدّد البيانات والأحداث التي يجب تتبّعها لبناء نموذج." } },
+    { e:"🗄️", t:"التخزين", o:["de"], d:{ de:"يصمّم المستودع أو البحيرة (Snowflake، BigQuery، S3)، والتقسيم، والتكلفة، وصلاحيات الوصول.", da:"يستهلكها — يحتاج إلى معرفة أماكن الجداول.", ds:"يستهلكها؛ وقد يحتاج إلى مخازن خصائص (Feature stores)." } },
+    { e:"🧹", t:"التنظيف والتحويل", o:["de","da","ds"], d:{ de:"يبني تحويلات بجودة إنتاجية، ونماذج dbt، واختبارات جودة البيانات، واتفاقيات مستوى الخدمة.", da:"تنظيف خفيف بـ SQL أو Excel لتحليل محدد؛ وقد يبني نماذج dbt (هندسة التحليلات).", ds:"معالجة مكثّفة وهندسة خصائص للنماذج (غالبًا بـ Python و pandas)." } },
+    { e:"🔍", t:"الاستكشاف والتحليل", o:["da","ds"], d:{ da:"العمل الأساسي: تقسيم البيانات، واكتشاف الاتجاهات، وتحديد الأسباب الجذرية، ومتابعة المؤشرات.", ds:"تحليل استكشافي (EDA) لفهم التوزيعات قبل النمذجة.", de:"يفحص البيانات للتحقق من خطوط البيانات، لا لاستخراج رؤى للأعمال." } },
+    { e:"🤖", t:"النمذجة والتنبؤ", o:["ds"], d:{ ds:"العمل الأساسي: نماذج إحصائية، وتدريب نماذج تعلّم الآلة وتقييمها، وتصميم اختبارات A/B.", da:"توقّعات أو انحدارات بسيطة أحيانًا.", de:"لا يشارك في النمذجة؛ قد يدعم بتوفير البيانات." } },
+    { e:"🚀", t:"النشر والتشغيل", o:["de","ds"], d:{ de:"جدولة المهام (Airflow)، والمراقبة، وتوسيع خطوط البيانات؛ ويدعم خطوط تعلّم الآلة (مع مهندسي ML).", ds:"يحزّم النماذج، ويعمل مع مهندسي ML والبيانات لإطلاقها ومراقبتها.", da:"ينشر لوحات المعلومات والتقارير المجدولة." } },
+    { e:"📢", t:"التواصل واتخاذ القرار", o:["da","ds"], d:{ da:"العمل الأساسي: لوحات المعلومات والعروض والتوصيات لأصحاب القرار.", ds:"يشرح نتائج النماذج والتجارب وأثرها.", de:"يوثّق عقود البيانات ومسارها للفرق الأخرى." } }
+  ],
+
+  ROWS: [
+    ["المهمة الأساسية", "الدور", "الإجابة عن أسئلة العمل بالبيانات ومساعدة الناس على اتخاذ قرارات أفضل.", "جعل البيانات متاحة وموثوقة وسريعة وآمنة للجميع.", "التنبّؤ بالنتائج وأتمتة القرارات باستخدام الإحصاء وتعلّم الآلة."],
+    ["السؤال الأساسي", "الدور", "ماذا حدث؟ ولماذا؟", "كيف تتدفّق البيانات من A إلى B بموثوقية؟", "ماذا سيحدث؟ وماذا لو غيّرنا X؟"],
+    ["نوع التحليلات", "الدور", "وصفي وتشخيصي", "تمكيني (بنية تحتية)", "تنبؤي وتوجيهي"],
+    ["المخرجات الرئيسية", "المخرجات", "لوحات معلومات، تقارير، تحليلات خاصة، عروض تقديمية", "خطوط بيانات، نماذج بيانات، مستودعات، واجهات API للبيانات", "نماذج تعلّم آلة، توقّعات، نتائج تجارب، دفاتر بحثية"],
+    ["من يستفيد من العمل", "المخرجات", "أصحاب المصلحة في الأعمال، المدراء، التنفيذيون", "المحللون، العلماء، التطبيقات، المهندسون الآخرون", "فرق المنتج، المهندسون، القيادة"],
+    ["البرمجة", "المهارات", "SQL (بكثافة)، Python/R (متوسط)، Excel", "Python، SQL، Scala/Java، Bash — بمستوى هندسة البرمجيات", "Python/R (بكثافة)، SQL (متوسط)"],
+    ["الرياضيات والإحصاء", "المهارات", "إحصاء وصفي واستدلال أساسي", "قليل", "متقدّم: الاحتمالات، الاستدلال، الجبر الخطي، نظرية تعلّم الآلة"],
+    ["هندسة البرمجيات", "المهارات", "منخفضة", "مرتفعة جدًا: الاختبارات، CI/CD، إدارة النسخ، تصميم الأنظمة", "متوسطة: كود نظيف، تحزيم، وأحيانًا النشر"],
+    ["فهم الأعمال", "المهارات", "مرتفع جدًا", "متوسط", "مرتفع"],
+    ["التواصل", "المهارات", "مرتفع جدًا — سرد القصص والتصوير المرئي", "متوسط — غالبًا مع فرق تقنية", "مرتفع — شرح النتائج المعقّدة ببساطة"],
+    ["الأدوات الرئيسية", "الأدوات", "SQL، Excel، Power BI، Tableau، Looker، Python (pandas)", "Spark، Airflow، dbt، Kafka، Snowflake، BigQuery، AWS/GCP/Azure، Docker", "Python، scikit-learn، PyTorch/TensorFlow، Jupyter، MLflow، statsmodels"],
+    ["نوع البيانات", "البيانات", "جداول منظّمة ونظيفة غالبًا", "بيانات خام وفوضوية بأي صيغة وبأحجام ضخمة، دفعية ومباشرة", "منظّمة وغير منظّمة (نصوص، صور)، بيانات تاريخية للتدريب"],
+    ["حجم البيانات", "البيانات", "متوسط عادةً (تجميعات)", "ضخم — التوسّع والتكلفة محوريان", "كبير — بما يكفي لتدريب نماذج قوية"],
+    ["الأفق الزمني", "أسلوب العمل", "الماضي والحاضر", "مستمر / أنظمة تعمل دائمًا", "المستقبل"],
+    ["دورة العمل المعتادة", "أسلوب العمل", "سريعة: ساعات إلى أيام لكل سؤال", "مشاريع طويلة؛ ومناوبة لمعالجة الأعطال", "أسابيع إلى أشهر لكل نموذج أو تجربة"],
+    ["شكل النجاح", "أسلوب العمل", "اتُّخذ قرار بفضل الرؤية التي قدّمتها", "الخطوط تعمل في وقتها، والبيانات موثوقة، ولا أحد يلاحظ", "النموذج يحسّن مؤشرًا (الإيرادات، التسرّب، الدقة) في الإنتاج"],
+    ["عندما يحدث خطأ", "أسلوب العمل", "أرقام خاطئة في تقرير ← قرار سيئ", "تعطّل خط البيانات ← كل ما يعتمد عليه يصبح قديمًا", "نموذج متحيّز أو منحرف ← قرارات آلية سيئة"],
+    ["التعليم المعتاد", "المسار المهني", "بكالوريوس في الأعمال أو الاقتصاد أو الإحصاء أو الحاسب، أو تعلّم ذاتي مع شهادات", "بكالوريوس في علوم الحاسب أو هندسة البرمجيات أو خبرة مكافئة", "غالبًا ماجستير أو دكتوراه في الإحصاء أو الحاسب أو الرياضيات أو الفيزياء (ليس شرطًا دائمًا)"],
+    ["صعوبة الدخول", "المسار المهني", "الأسهل — أكثر نقاط الدخول شيوعًا لمجال البيانات", "متوسطة إلى مرتفعة — تتطلّب هندسة قوية", "الأصعب — يتطلّب عمقًا رياضيًا وبرمجة"],
+    ["الأجر النسبي", "المسار المهني", "$ – $$", "$$ – $$$", "$$ – $$$"],
+    ["شهادات شائعة", "المسار المهني", "Google Data Analytics، Microsoft PL-300 (Power BI)، Tableau", "AWS/GCP/Azure Data Engineer، Databricks، Snowflake SnowPro", "TensorFlow Developer، AWS ML Specialty، Azure Data Scientist"],
+    ["خطر الذكاء الاصطناعي على المسار", "الذكاء الاصطناعي", "متوسط إلى مرتفع: كتابة SQL والتقارير الروتينية تُؤتمت بشكل متزايد", "منخفض إلى متوسط: الذكاء الاصطناعي يكتب الكود المتكرر، لكن الطلب على منصات البيانات ينمو", "متوسط: النمذجة المعتادة أصبحت سلعة؛ والذكاء التوليدي والتجارب في نمو"],
+    ["كيف يغيّر الذكاء الاصطناعي الوظيفة", "الذكاء الاصطناعي", "من صانع تقارير ← شريك في القرار ومدقّق لمخرجات الذكاء الاصطناعي", "من كاتب خطوط بيانات ← مصمّم منصات، بما فيها بيانات الذكاء الاصطناعي و RAG", "من بانٍ للنماذج ← مصمّم ومقيّم لأنظمة الذكاء الاصطناعي"],
+    ["أدوار قريبة", "المسار المهني", "محلل ذكاء أعمال، مهندس تحليلات، محلل أعمال", "مهندس تحليلات، مهندس منصات، مهندس ML", "مهندس ML، عالم أبحاث، محلل كمّي، عالم تطبيقي"]
+  ],
+
+  SKILLS: [
+    ["SQL", 9, 9, 7], ["Python / R", 5, 8, 9], ["الإحصاء", 5, 2, 9], ["تعلّم الآلة", 2, 3, 9],
+    ["هندسة البرمجيات", 3, 10, 6], ["السحابة والبنية التحتية", 2, 9, 4], ["التصوير المرئي للبيانات", 10, 3, 6],
+    ["فهم الأعمال", 9, 5, 7], ["التواصل", 9, 5, 7], ["نمذجة البيانات", 5, 10, 5]
+  ],
+
+  DAY: {
+    da: { items: [["09:00","مراجعة لوحات المؤشرات؛ ملاحظة انخفاض غير معتاد في طلبات عطلة نهاية الأسبوع."],["10:00","اجتماع سريع مع التسويق — يريدون معرفة إن كانت حملة الأسبوع الماضي ناجحة."],["11:00","كتابة استعلامات SQL لربط جداول الحملات والطلبات والعملاء."],["13:00","الغداء وسؤال سريع على Slack: «لماذا يختلف رقم المالية عن رقمنا؟»"],["14:00","مراجعة تعريفات المؤشرات وتسوية الاختلاف."],["15:30","بناء صفحة Power BI تقارن شرائح العملاء في الحملة."],["17:00","عرض النتائج: الحملة رفعت الطلبات 6% في منطقتين — التوصية بالتوسّع."]],
+          love: "رؤية تحليلك يغيّر قرارًا مباشرة؛ وتنوّع الأسئلة.", hard: "تعريفات مؤشرات متضاربة، وطلبات عاجلة في اللحظة الأخيرة، وبيانات مصدر فوضوية." },
+    de: { items: [["09:00","مراجعة Airflow: فشل خط البيانات الليلي — واجهة API في المصدر غيّرت هيكلها."],["09:30","إصلاح سريع للمحلّل، وإعادة تحميل الأجزاء المفقودة، وإبلاغ المستخدمين المعتمدين عليها."],["11:00","مراجعة تصميم لبث مباشر جديد لأحداث الطلبات (Kafka ← المستودع)."],["13:00","الغداء."],["14:00","كتابة نماذج dbt واختبارات جودة البيانات لجدول الطلبات الجديد."],["15:30","مراجعة كود زميل؛ وتحسين مهمة Spark بطيئة لخفض تكلفة السحابة 30%."],["17:00","تحديث التوثيق وكتالوج البيانات؛ وتسليم ملاحظات المناوبة."]],
+          love: "بناء أنظمة على نطاق واسع؛ وحل ألغاز تقنية صعبة؛ وحِرفية هندسية واضحة.", hard: "إطفاء الحرائق أثناء المناوبة؛ لا أحد يراك حين تعمل الأمور، والكل يلومك حين تتعطّل." },
+    ds: { items: [["09:00","مراجعة نتائج تدريب النماذج الليلي ومقاييس التقييم."],["10:00","اجتماع مع فريق المنتج حول التنبّؤ بتسرّب العملاء."],["11:00","تحليل استكشافي في Jupyter؛ وبناء خصائص مثل «الأيام منذ آخر طلب»."],["13:00","الغداء وقراءة ورقة بحثية عن تقنية تنبّؤ جديدة."],["14:00","تدريب نماذج ومقارنتها (الانحدار اللوجستي مقابل Gradient Boosting)؛ وضبط المعاملات."],["15:30","تصميم اختبار A/B لقياس إن كانت العروض الموجّهة تقلّل التسرّب."],["17:00","تنسيق مع مهندس ML حول نشر النموذج خلف واجهة API."]],
+          love: "البحث والتجريب وبناء أشياء تتنبّأ بالمستقبل.", hard: "نماذج لا تصل أبدًا إلى الإنتاج؛ ومشكلات غير واضحة الصياغة؛ وبيانات غير جاهزة." }
+  },
+
+  SCEN: [
+    { t: "ارتفاع معدل تسرّب العملاء", d: "ارتفعت الاشتراكات الملغاة 15% هذا الربع، والقيادة تريد التحرّك.",
+      da: ["تشخيص المشكلة", "يقسّم التسرّب حسب المنطقة والباقة ومدة الاشتراك وقناة الاكتساب. يجد أن التسرّب يتركّز في المستخدمين الذين انضمّوا عبر عرض خصم.", "لوحة معلومات للتسرّب + عرض بالسبب الجذري", "SELECT channel, COUNT(*) FILTER (WHERE churned)::float / COUNT(*) AS churn_rate\nFROM customers GROUP BY channel ORDER BY 2 DESC;"],
+      de: ["توفير البيانات", "يبني خط بيانات يربط أحداث التطبيق والفوترة وتذاكر الدعم في جدول يومي نظيف للعملاء، ليمكن قياس التسرّب بموثوقية.", "جدول customer_daily + مهمة Airflow + اختبارات بيانات", "@dag(schedule='@daily')\ndef customer_churn_pipeline():\n    extract_billing() >> transform_dbt() >> run_quality_checks()"],
+      ds: ["التنبّؤ والوقاية", "يدرّب نموذجًا يقيّم خطر تسرّب كل عميل، ثم يصمّم اختبار A/B يمنح العملاء الأكثر خطرًا عرضًا للاحتفاظ بهم.", "نموذج لخطر التسرّب + نتائج التجربة", "model = GradientBoostingClassifier()\nmodel.fit(X_train, y_train)\nroc_auc_score(y_test, model.predict_proba(X_test)[:,1])"] },
+    { t: "تخطيط قدرة التوصيل للشهر القادم", d: "تحتاج العمليات إلى معرفة عدد السائقين المطلوب جدولتهم في كل منطقة.",
+      da: ["النظر إلى الماضي", "يحلّل حجم الطلبات التاريخي حسب المنطقة واليوم والساعة؛ ويبرز أوقات الذروة والأنماط الموسمية.", "خريطة حرارية للطلب حسب المنطقة والساعة", "SELECT zone, EXTRACT(dow FROM ts) d, EXTRACT(hour FROM ts) h, COUNT(*)\nFROM orders GROUP BY 1,2,3;"],
+      de: ["تغذية بيانات لحظية", "يبث أحداث الطلبات ومواقع السائقين مباشرة إلى المستودع بتحديث كل دقيقة لأدوات العمليات.", "خط بث مباشر Kafka ← المستودع", "orders_stream.writeStream.format('delta')\n  .option('checkpointLocation', ckpt).start(path)"],
+      ds: ["توقّع الطلب", "يبني نموذج سلاسل زمنية لكل منطقة يشمل الطقس والعطلات؛ ويُخرج الطلبات المتوقّعة لكل ساعة مع نطاقات الثقة.", "نموذج توقّع يغذّي أداة الجدولة", "from prophet import Prophet\nm = Prophet().add_country_holidays('AE')\nm.fit(df); forecast = m.predict(future)"] },
+    { t: "إطلاق ميزة توصية المنتجات", d: "يريد التطبيق عرض «قد يعجبك أيضًا…» لزيادة حجم السلّة.",
+      da: ["قياس الأثر", "يحدّد مقاييس النجاح (حجم السلّة، معدل النقر)، ويبني لوحة متابعة، ويقيس التحسّن بعد الإطلاق.", "لوحة أداء الميزة", "SELECT variant, AVG(basket_value)\nFROM orders JOIN experiments USING(user_id)\nGROUP BY variant;"],
+      de: ["تقديم البيانات بسرعة", "يبني تتبّع الأحداث وخطوط الخصائص ومخزنًا سريعًا لتُعرض التوصيات خلال أجزاء من الثانية.", "تتبّع الأحداث + مخزن خصائص + واجهة API", "redis.hset(f'user:{uid}:features', mapping=features)"],
+      ds: ["بناء نظام التوصية", "يطوّر نموذج تصفية تعاونية / تضمينات لتشابه المنتجات، ويقيّمه دون اتصال قبل اختبار A/B مباشر.", "نموذج توصية + تقييم دون اتصال ومباشر", "from implicit.als import AlternatingLeastSquares\nmodel = AlternatingLeastSquares(factors=64)\nmodel.fit(user_item_matrix)"] }
+  ],
+
+  LADDERS: {
+    da: ["محلل مبتدئ / مساعد", "محلل بيانات", "محلل أول", "محلل رئيسي / مدير التحليلات", "رئيس التحليلات / مدير ذكاء الأعمال"],
+    de: ["مهندس بيانات مبتدئ", "مهندس بيانات", "مهندس بيانات أول", "مهندس Staff / Principal أو مدير هندسة البيانات", "رئيس منصة البيانات / معماري البيانات"],
+    ds: ["عالم بيانات مبتدئ / مساعد", "عالم بيانات", "عالم بيانات أول", "عالم Staff / Principal أو مدير علوم البيانات", "رئيس علوم البيانات / الرئيس التنفيذي للبيانات (CDO)"]
+  },
+  METERS: [["صعوبة الدخول", 2, 4, 5], ["أجر البداية", 2, 4, 4], ["سقف أجر الخبراء", 3, 5, 5], ["الطلب في السوق", 4, 5, 4], ["كثافة البرمجة", 2, 5, 4], ["كثافة الرياضيات", 2, 1, 5], ["التواصل مع أصحاب القرار", 5, 2, 4]],
+  MOVES: [
+    "<b>محلل ← مهندس تحليلات ← مهندس بيانات:</b> التطوّر من SQL إلى dbt وخطوط البيانات وممارسات هندسة البرمجيات.",
+    "<b>محلل ← عالم بيانات:</b> تعميق الإحصاء و Python وتعلّم الآلة.",
+    "<b>مهندس برمجيات ← مهندس بيانات:</b> انتقال شائع جدًا؛ المهارات الهندسية تنتقل مباشرة.",
+    "<b>عالم بيانات ← مهندس ML:</b> التركيز على نشر النماذج وتوسيعها ومراقبتها.",
+    "<b>أي دور ← الإدارة / المنتج:</b> قيادة الفرق أو العمل كمدير منتج بيانات."
+  ],
+
+  AI: {
+    da: { risk: 60, level: "متوسط إلى مرتفع",
+          why: "أدوات تحويل النص إلى SQL ومساعدو الذكاء الاصطناعي في Power BI و Tableau وأدوات «تحدّث مع بياناتك» تنجز بالفعل الاستعلامات الروتينية ولوحات المعلومات المعتادة. المحللون الذين <i>ينتجون التقارير</i> فقط هم الأكثر عرضة؛ أما من <i>يملكون القرار وسياق العمل</i> فتزداد قيمتهم.",
+          tasks: [["كتابة استعلامات SQL المعتادة", 75, "تولّد النماذج اللغوية SQL صحيحًا لمعظم الهياكل الموثّقة جيدًا؛ ويبقى على الإنسان التحقّق من المنطق وتعريفات المؤشرات."],
+                  ["بناء لوحات وتقارير روتينية", 70, "مساعدو ذكاء الأعمال ينشئون الرسوم والصفحات من وصف نصي؛ والخدمة الذاتية تقلّل طلبات التقارير."],
+                  ["تنظيف البيانات في Excel/SQL", 60, "يقترح الذكاء الاصطناعي الإصلاحات ويطبّقها، لكن الحالات الخاصة تحتاج إلى حكم بشري."],
+                  ["كتابة ملخّصات النتائج", 65, "يكتب الذكاء الاصطناعي مسودة النص من الرسوم؛ ويتحقّق المحلل من الدقة والأسلوب."],
+                  ["الاستكشاف الخاص", 45, "يسرّع الذكاء الاصطناعي الاستكشاف؛ لكن معرفة السؤال المهم تبقى بشرية."],
+                  ["تعريف المقاييس والمؤشرات", 20, "يتطلّب توافقًا بين الفرق وفهمًا عميقًا للأعمال."],
+                  ["التأثير في أصحاب القرار", 10, "الثقة والتفاوض والسياق نقاط قوة بشرية."],
+                  ["التحقّق من مخرجات الذكاء الاصطناعي وجودة البيانات", 15, "مهمة متنامية: لا بد من شخص يكتشف الإجابات الواثقة الخاطئة."]],
+          shift: { auto: ["التقارير الأسبوعية والشهرية الروتينية", "استعلامات SQL والجداول المحورية البسيطة", "المسودات الأولى للرسوم والتعليقات"],
+                   aug: ["تحليلات أعمق وأسرع بمساعدي الذكاء الاصطناعي", "تحليل بـ Python دون أن تكون مبرمجًا", "نطاق عمل أوسع لكل محلل"],
+                   next: ["مهندس تحليلات", "محلل منتج / أعمال مدعوم بالذكاء الاصطناعي", "عالم قرارات (Decision Scientist)", "مسؤول الطبقة الدلالية / مخزن المقاييس"] },
+          fp: [["خبرة عميقة في مجال (مالية، عمليات، تسويق)", 12], ["امتلاك تعريف مقياس / طبقة دلالية", 10], ["تعلّم dbt أو Python بما يتجاوز الأساسيات", 8], ["إجراء تجارب / تحليل سببي أساسي", 8], ["استخدام مساعدي الذكاء الاصطناعي يوميًا ومراجعة مخرجاتهم بعين ناقدة", 8], ["تقديم توصيات للقيادة بانتظام", 8]] },
+    de: { risk: 30, level: "منخفض إلى متوسط",
+          why: "يكتب الذكاء الاصطناعي كود خطوط البيانات المتكرر وتحويلات SQL والاختبارات، لكن لا بد من شخص يصمّم أنظمة موثوقة وآمنة وفعّالة التكلفة. والذكاء الاصطناعي نفسه <i>يحتاج</i> إلى بنية بيانات أكبر (قواعد بيانات المتجهات، خطوط RAG، مخازن الخصائص)، لذا فالطلب في ارتفاع.",
+          tasks: [["كتابة كود ETL المتكرر", 65, "مساعدو البرمجة يولّدون الموصلات ونماذج dbt وكود Spark بسرعة."],
+                  ["كتابة اختبارات الوحدات وجودة البيانات", 55, "يكتب الذكاء الاصطناعي مسودات اختبارات جيدة؛ ويقرّر الإنسان ما يجب ضمانه فعلًا."],
+                  ["التوثيق وكتالوج البيانات", 60, "يولّد الذكاء الاصطناعي أوصاف الأعمدة وملخّصات مسار البيانات تلقائيًا."],
+                  ["تتبّع أعطال خطوط البيانات", 40, "يساعد الذكاء الاصطناعي في قراءة السجلات واقتراح الحلول؛ لكن السبب الجذري في الأنظمة المعقّدة يحتاج إلى مهندسين."],
+                  ["تصميم الأنظمة والمعمارية", 15, "الموازنة بين التكلفة والتوسّع وزمن الاستجابة والحوكمة تتطلّب خبرة."],
+                  ["حوكمة البيانات والخصوصية والأمن", 15, "اللوائح والمساءلة تبقى مسؤولية البشر."],
+                  ["خفض التكلفة على نطاق واسع", 25, "تلميحات الذكاء الاصطناعي تساعد، لكن القرارات تتضمّن موازنات تجارية."],
+                  ["بناء منصات بيانات للذكاء الاصطناعي (RAG، المتجهات)", 10, "مجال عمل جديد سريع النمو."]],
+          shift: { auto: ["الموصلات المتكررة المكتوبة يدويًا", "تحويلات SQL البسيطة", "كتابة التوثيق من الصفر"],
+                   aug: ["تطوير وترحيل أسرع", "فرز الأعطال بمساعدة الذكاء الاصطناعي", "خطوط بيانات أكثر لكل مهندس"],
+                   next: ["مهندس بيانات للذكاء الاصطناعي / LLM (RAG، التضمينات)", "مهندس منصة بيانات", "مهندس MLOps / LLMOps", "مهندس حوكمة البيانات"] },
+          fp: [["إتقان تصميم الأنظمة والأنظمة الموزّعة", 8], ["مهارات تكلفة السحابة و FinOps", 5], ["بناء خطوط RAG / قواعد بيانات المتجهات", 7], ["معرفة حوكمة البيانات والخصوصية والأمن", 5], ["استخدام مساعدي البرمجة بالذكاء الاصطناعي بفعالية", 5]] },
+    ds: { risk: 45, level: "متوسط",
+          why: "مع AutoML والنماذج الأساسية (النماذج اللغوية ونماذج الرؤية) لم تعد كثير من النماذج المعتادة تحتاج إلى البناء من الصفر. عمل «تدريب مصنّف» التقليدي معرّض، بينما تنمو التجارب والاستدلال السببي والتقييم وتطبيقات الذكاء التوليدي.",
+          tasks: [["تدريب النماذج المعتادة وضبطها", 65, "يدرّب AutoML ومساعدو الذكاء الاصطناعي نماذج أساسية قوية ويضبطونها في دقائق."],
+                  ["هندسة الخصائص", 50, "يقترح الذكاء الاصطناعي خصائص؛ لكن الخصائص المبنية على فهم المجال تحتاج إلى البشر."],
+                  ["كتابة كود التحليل في الدفاتر", 65, "مساعدو البرمجة يكتبون معظم كود pandas و sklearn."],
+                  ["بناء نماذج NLP أو رؤية من الصفر", 70, "غالبًا ما يُستبدل بالتوجيه (Prompting) أو بضبط نماذج مدرّبة مسبقًا."],
+                  ["صياغة المشكلة مع فريق الأعمال", 15, "اختيار المشكلة الصحيحة ومقياس النجاح عمل بشري."],
+                  ["تصميم التجارب والاستدلال السببي", 20, "يتطلّب صرامة إحصائية وحكمًا على العوامل المربكة."],
+                  ["تقييم أنظمة الذكاء الاصطناعي والتحيّز", 15, "حاجة متنامية: قياس الجودة والأمان والعدالة."],
+                  ["توصيل عدم اليقين والأثر", 15, "شرح الموازنات لصنّاع القرار يبقى بشريًا."]],
+          shift: { auto: ["النمذجة الأساسية", "كود الدفاتر المتكرر", "كثير من نماذج NLP المخصّصة"],
+                   aug: ["بناء نماذج أولية أسرع بالنماذج اللغوية", "بحث أسرع في الأدبيات والكود", "نطاق أوسع لكل عالم"],
+                   next: ["عالم ذكاء اصطناعي تطبيقي / توليدي", "عالم تقييم الذكاء الاصطناعي", "مهندس ML", "متخصّص الاستدلال السببي والتجارب"] },
+          fp: [["التجارب والاستدلال السببي", 9], ["ضبط النماذج اللغوية وتوجيهها وتقييمها", 9], ["نشر النماذج في الإنتاج (MLOps)", 8], ["صياغة قوية لمشكلات الأعمال", 8], ["الذكاء الاصطناعي المسؤول (التحيّز، العدالة، الأمان)", 6]] }
+  },
+  AI_ROWS: [
+    ["الخطر المهني العام من الذكاء الاصطناعي", "متوسط إلى مرتفع", "منخفض إلى متوسط", "متوسط"],
+    ["المهام الأكثر عرضة", "SQL المعتاد، اللوحات الروتينية، كتابة التقارير", "كود ETL المتكرر، التوثيق، الاختبارات البسيطة", "النماذج الأساسية، كود الدفاتر، نماذج NLP المخصّصة"],
+    ["المهام الأكثر أمانًا", "تعريف المقاييس، التأثير في أصحاب القرار، امتلاك القرار", "المعمارية، الحوكمة، الموثوقية، التكلفة", "صياغة المشكلة، التجارب، الاستدلال السببي، تقييم الذكاء الاصطناعي"],
+    ["أثر الذكاء الاصطناعي على الطلب", "طلب أقل على صانعي التقارير فقط؛ وطلب أكبر على المحللين الفاهمين للأعمال", "في ارتفاع — الذكاء الاصطناعي يحتاج إلى خطوط بيانات أكثر وأفضل", "تحوّل من تعلّم الآلة التقليدي إلى الذكاء التوليدي والتقييم والتجارب"],
+    ["الملف الأكثر عرضة للخطر", "محلل مبتدئ يعمل على التقارير المتكررة فقط", "مهندس يكتب مهام SQL بسيطة ومتكررة فقط", "عالم يدرّب نماذج معتادة على بيانات نظيفة فقط"],
+    ["المهارة الأهم لإضافتها الآن", "خبرة المجال + dbt / الطبقة الدلالية + مساعدو الذكاء الاصطناعي", "خطوط RAG / المتجهات، تصميم المنصات والأنظمة", "تقييم النماذج اللغوية، MLOps، الاستدلال السببي"]
+  ],
+
+  MYTHS: [
+    ["محللو البيانات يصنعون الرسوم البيانية فقط.", "الرسوم هي المخرج. العمل الحقيقي هو صياغة السؤال الصحيح، والحصول على أرقام صحيحة، وتحويلها إلى قرار."],
+    ["علماء البيانات يقضون يومهم في بناء نماذج ذكاء اصطناعي مبهرة.", "يذهب كثير من الوقت إلى تنظيف البيانات وصياغة المشكلات وتوصيل النتائج. والنمذجة غالبًا هي الجزء الأصغر."],
+    ["هندسة البيانات مجرد نقل ملفات.", "إنها هندسة برمجيات للبيانات: أنظمة موزّعة، وموثوقية، وتكلفة، وأمن، ونمذجة بيانات، وحوكمة."],
+    ["تحتاج إلى دكتوراه للعمل في علم البيانات.", "مفيدة لأدوار البحث، لكن كثيرًا من علماء البيانات يحملون بكالوريوس أو ماجستير مع خبرة عملية قوية."],
+    ["الذكاء الاصطناعي سيستبدل محللي البيانات.", "يسرّع الذكاء الاصطناعي الاستعلام والرسم، لكن فهم الأعمال والتحقّق من الأرقام والتأثير في الناس يبقى عملًا بشريًا."],
+    ["هذه ثلاث وظائف منفصلة تمامًا.", "الحدود متداخلة. في الشركات الناشئة غالبًا ما يؤدي شخص واحد الأدوار الثلاثة، والمسمّيات تختلف كثيرًا بين الشركات."]
+  ],
+
+  QUIZ: [
+    ["ما الذي يبدو أكثر إرضاءً لك؟", [["تقديم رؤية تغيّر قرارًا في العمل","da"],["بناء نظام يعالج ملايين السجلات دون أخطاء","de"],["تدريب نموذج يتنبّأ بالمستقبل بدقة","ds"]]],
+    ["اختر مادتك المفضّلة:", [["الأعمال والاقتصاد","da"],["علوم الحاسب والأنظمة","de"],["الإحصاء والرياضيات","ds"]]],
+    ["كيف تفضّل أن تعمل؟", [["مع أشخاص كثيرين، وأسئلة سريعة، وتنوّع","da"],["تركيز عميق على المعمارية التقنية","de"],["تحقيق بأسلوب بحثي على مدى أسابيع","ds"]]],
+    ["أي أداة تثير حماسك أكثر؟", [["Power BI / Tableau","da"],["Airflow / Spark / Kafka","de"],["PyTorch / scikit-learn","ds"]]],
+    ["يظهر رقم غريب في تقرير. ما ردّ فعلك الأول؟", [["أفهم ماذا يعني للعمل","da"],["أتتبّع أي خطوة في خط البيانات تعطّلت","de"],["أتحقّق إن كان قيمة شاذة إحصائيًا","ds"]]],
+    ["ماذا تفضّل أن تكتب؟", [["قصة واضحة برسوم بيانية للتنفيذيين","da"],["كودًا نظيفًا ومختبرًا جاهزًا للإنتاج","de"],["تصميم تجربة وتحليلها","ds"]]],
+    ["إنجازك المثالي:", [["«تغيّرت استراتيجية المبيعات بفضل تحليلي»","da"],["«منصة البيانات لدينا لا تتوقّف أبدًا»","de"],["«نموذجي رفع الإيرادات 5%»","ds"]]],
+    ["ما شعورك تجاه الرياضيات؟", [["مرتاح للأساسيات، وأفضّل التركيز على الأعمال","da"],["لا بأس بها، لكنني أحب البناء أكثر","de"],["أحب الاحتمالات والجبر الخطي والبراهين","ds"]]]
+  ]
+};
+</script>
+<script>
+let LANG = "en";
+try { LANG = new URLSearchParams(location.search).get("lang") || localStorage.getItem("lang") || "en"; } catch (e) {}
+const AR_ON = LANG === "ar" && !!window.AR;
+const t = s => (AR_ON && AR.ui[s]) || s;
+if (AR_ON) { document.documentElement.lang = "ar"; document.documentElement.dir = "rtl"; document.title = AR.title; }
+const langBtn = document.getElementById("langBtn");
+langBtn.textContent = AR_ON ? "English" : "العربية";
+langBtn.onclick = () => {
+  const next = AR_ON ? "en" : "ar";
+  try { localStorage.setItem("lang", next); } catch (e) {}
+  const u = new URL(location.href); u.searchParams.set("lang", next); location.href = u.href;
+};
+if (AR_ON) AR.static.forEach(([sel, html]) => {
+  const els = document.querySelectorAll(sel);
+  if (Array.isArray(html)) html.forEach((h, i) => { if (els[i]) els[i].innerHTML = h; });
+  else els.forEach(el => el.innerHTML = html);
+});
+if (AR_ON) document.getElementById("search").placeholder = t("Search e.g. SQL, salary, degree, stakeholders…");
+
+const ROLES = {
+  da: { name: "Data Analyst", short: "Analyst", color: "var(--da)", icon: "📊",
+        tag: "Turns data into insight & decisions",
+        summary: "Explores existing data to explain what happened and why, then communicates it through reports, dashboards and recommendations.",
+        focus: ["Descriptive & diagnostic analytics", "KPIs, dashboards, reporting", "Ad-hoc business questions", "Storytelling for stakeholders"],
+        output: "Dashboards, reports, presentations, recommendations",
+        question: "What happened, and why?" },
+  de: { name: "Data Engineer", short: "Engineer", color: "var(--de)", icon: "🛠️",
+        tag: "Builds the roads data travels on",
+        summary: "Designs, builds and maintains the systems that collect, move, store and clean data so it is reliable and available at scale.",
+        focus: ["Data pipelines (ETL/ELT)", "Data warehouses & lakes", "Data quality, reliability, scale", "Infrastructure & orchestration"],
+        output: "Pipelines, data models, warehouses, APIs, platforms",
+        question: "How do we get the right data, reliably, to where it's needed?" },
+  ds: { name: "Data Scientist", short: "Scientist", color: "var(--ds)", icon: "🧠",
+        tag: "Predicts & automates with models",
+        summary: "Uses statistics and machine learning to predict what will happen, run experiments and build models that power products.",
+        focus: ["Predictive modelling & ML", "Statistics & experimentation (A/B)", "Feature engineering", "Research & prototyping"],
+        output: "ML models, forecasts, experiments, research findings",
+        question: "What will happen, and what should we do about it?" }
+};
+const KEYS = ["da", "de", "ds"];
+if (AR_ON) KEYS.forEach(k => Object.assign(ROLES[k], AR.ROLES[k]));
+
+/* ---------- NAV ---------- */
+const SECTIONS = AR_ON ? AR.SECTIONS : [
+  ["overview","Overview"],["pipeline","Lifecycle"],["compare","Compare all"],["skills","Skills"],
+  ["tools","Tools"],["day","Day in life"],["scenario","Same problem"],["career","Career & pay"],
+  ["ai","🤖 AI impact"],["myths","Myths"],["quiz","Which fits me?"]
+];
+const nav = document.getElementById("nav");
+SECTIONS.forEach(([id, label], i) => {
+  const b = document.createElement("button");
+  b.textContent = label; if (i === 0) b.classList.add("active");
+  b.onclick = () => {
+    document.querySelectorAll("nav button").forEach(x => x.classList.remove("active"));
+    document.querySelectorAll("section").forEach(x => x.classList.remove("active"));
+    b.classList.add("active"); document.getElementById(id).classList.add("active");
+    if (id === "skills") drawSkills();
+    if (id === "ai") animateAI();
+    window.scrollTo({ top: document.querySelector("nav").offsetTop, behavior: "smooth" });
+  };
+  nav.appendChild(b);
+});
+
+/* ---------- OVERVIEW ---------- */
+document.getElementById("cards").innerHTML = KEYS.map(k => {
+  const r = ROLES[k];
+  return `<div class="card" style="--c:${r.color}" onclick="this.classList.toggle('open')">
+    <span class="hint">${t("click ▾")}</span>
+    <div class="icon">${r.icon}</div><h3>${r.name}</h3>
+    <div class="tag">${r.tag}</div><div>${r.summary}</div>
+    <div class="more"><b>${t("Focus areas")}</b><ul>${r.focus.map(f => `<li>${f}</li>`).join("")}</ul>
+    <b>${t("Main output:")}</b> ${r.output}</div></div>`;
+}).join("");
+const ANALOGY = AR_ON ? AR.ANALOGY : {
+  de: "<b>The supply chain & kitchen builder.</b> Sources ingredients, builds the kitchen, plumbing and fridges so everything arrives fresh and on time.",
+  da: "<b>The restaurant manager.</b> Reads the sales sheets: which dishes sold, which nights were slow, why Tuesday dipped — and tells the owner.",
+  ds: "<b>The R&D chef.</b> Experiments with recipes and predicts what customers will order next week so the kitchen can prepare."
+};
+document.getElementById("analogy").innerHTML = ["de","da","ds"].map(k =>
+  `<div style="--c:${ROLES[k].color}"><b style="color:${ROLES[k].color}">${ROLES[k].icon} ${ROLES[k].name}</b><br>${ANALOGY[k]}</div>`).join("");
+document.getElementById("questions").innerHTML = KEYS.map(k =>
+  `<div style="--c:${ROLES[k].color}"><b style="color:${ROLES[k].color}">${ROLES[k].name}</b><br><span style="font-size:1.1rem">“${ROLES[k].question}”</span></div>`).join("");
+
+/* ---------- PIPELINE ---------- */
+const STAGES = AR_ON ? AR.STAGES : [
+  { e:"📥", t:"Collect", o:["de"], d:{ de:"Connects to sources (apps, APIs, logs, 3rd parties), builds ingestion jobs, streaming (Kafka) and batch loads.", da:"Rarely involved; may request new data sources.", ds:"May specify which data/events need tracking for a model." } },
+  { e:"🗄️", t:"Store", o:["de"], d:{ de:"Designs the warehouse/lake (Snowflake, BigQuery, S3), partitioning, cost and access control.", da:"Consumes it — needs to know where tables live.", ds:"Consumes it; may need feature stores." } },
+  { e:"🧹", t:"Clean & Transform", o:["de","da","ds"], d:{ de:"Builds production-grade transformations, dbt models, data quality tests, SLAs.", da:"Light cleaning in SQL/Excel for a specific analysis; may build dbt models (analytics engineering).", ds:"Heavy wrangling & feature engineering for models (often in Python/pandas)." } },
+  { e:"🔍", t:"Explore & Analyse", o:["da","ds"], d:{ da:"Core work: slicing data, finding trends, root causes, KPI tracking.", ds:"Exploratory data analysis (EDA) to understand distributions before modelling.", de:"Profiles data to validate pipelines, not for business insight." } },
+  { e:"🤖", t:"Model & Predict", o:["ds"], d:{ ds:"Core work: statistical models, ML training, evaluation, A/B test design.", da:"Simple forecasts or regressions occasionally.", de:"Not involved in modelling; may support with data." } },
+  { e:"🚀", t:"Deploy & Operate", o:["de","ds"], d:{ de:"Orchestration (Airflow), monitoring, scaling pipelines; supports ML pipelines (with ML engineers).", ds:"Packages models, works with ML/data engineers to ship and monitor them.", da:"Publishes dashboards and scheduled reports." } },
+  { e:"📢", t:"Communicate & Decide", o:["da","ds"], d:{ da:"Core work: dashboards, presentations, recommendations to business stakeholders.", ds:"Explains model results, experiment outcomes and impact.", de:"Documents data contracts & lineage for other teams." } }
+];
+const pipe = document.getElementById("pipe");
+pipe.innerHTML = STAGES.map((s, i) => `
+  ${i ? '<div class="arrow">➜</div>' : ''}
+  <div class="stage" data-i="${i}"><div class="emoji">${s.e}</div><h4>${s.t}</h4>
+  <div class="owners">${s.o.map(k => `<span style="background:${ROLES[k].color}" title="${ROLES[k].name}"></span>`).join("")}</div></div>`).join("");
+pipe.querySelectorAll(".stage").forEach(el => el.onclick = () => {
+  pipe.querySelectorAll(".stage").forEach(x => x.classList.remove("sel")); el.classList.add("sel");
+  const s = STAGES[el.dataset.i];
+  document.getElementById("pipeDetail").innerHTML = `<h3 style="margin-top:0">${s.e} ${s.t}</h3>` +
+    KEYS.map(k => `<p style="margin:6px 0"><b style="color:${ROLES[k].color}">${ROLES[k].name}${s.o.includes(k) ? " ★" : ""}:</b> ${s.d[k]}</p>`).join("") +
+    `<p style="color:var(--muted);font-size:.8rem;margin-bottom:0">${t("★ = primary owner of this stage")}</p>`;
+});
+const pipeBtns = document.getElementById("pipeBtns");
+pipeBtns.innerHTML = `<button style="--c:#8890c0" class="active" data-k="all">${t("All roles")}</button>` +
+  KEYS.map(k => `<button style="--c:${ROLES[k].color}" data-k="${k}">${ROLES[k].name}</button>`).join("");
+pipeBtns.querySelectorAll("button").forEach(b => b.onclick = () => {
+  pipeBtns.querySelectorAll("button").forEach(x => x.classList.remove("active")); b.classList.add("active");
+  pipe.querySelectorAll(".stage").forEach(el => {
+    const s = STAGES[el.dataset.i];
+    el.classList.toggle("dim", b.dataset.k !== "all" && !s.o.includes(b.dataset.k));
+  });
+});
+
+/* ---------- COMPARE TABLE ---------- */
+const ROWS = AR_ON ? AR.ROWS : [
+  ["Mission", "Role", "Answer business questions with data and help people make better decisions.", "Make data available, reliable, fast and secure for everyone else.", "Predict outcomes and automate decisions using statistics and ML."],
+  ["Core question", "Role", "What happened? Why?", "How does data flow from A to B reliably?", "What will happen? What if we change X?"],
+  ["Type of analytics", "Role", "Descriptive & diagnostic", "Enabling (infrastructure)", "Predictive & prescriptive"],
+  ["Main deliverables", "Output", "Dashboards, reports, ad-hoc analyses, slide decks", "Pipelines, data models, warehouses, data APIs", "ML models, forecasts, experiment results, research notebooks"],
+  ["Who consumes the work", "Output", "Business stakeholders, managers, executives", "Analysts, scientists, apps, other engineers", "Product teams, engineers, leadership"],
+  ["Programming", "Skills", "SQL (heavy), Python/R (moderate), Excel", "Python, SQL, Scala/Java, Bash — software-engineering level", "Python/R (heavy), SQL (moderate)"],
+  ["Math & statistics", "Skills", "Descriptive stats, basic inference", "Minimal", "Advanced: probability, inference, linear algebra, ML theory"],
+  ["Software engineering", "Skills", "Low", "Very high: testing, CI/CD, version control, system design", "Medium: clean code, packaging, sometimes deployment"],
+  ["Business acumen", "Skills", "Very high", "Medium", "High"],
+  ["Communication", "Skills", "Very high — storytelling & visualisation", "Medium — mostly technical teams", "High — explain complex results simply"],
+  ["Key tools", "Tools", "SQL, Excel, Power BI, Tableau, Looker, Python (pandas)", "Spark, Airflow, dbt, Kafka, Snowflake, BigQuery, AWS/GCP/Azure, Docker", "Python, scikit-learn, PyTorch/TensorFlow, Jupyter, MLflow, statsmodels"],
+  ["Data they work with", "Data", "Mostly clean, structured tables", "Raw, messy, any format, huge volumes, batch & streaming", "Structured + unstructured (text, images), historical training data"],
+  ["Data volume concern", "Data", "Usually moderate (aggregations)", "Massive — scale & cost are central", "Large — enough to train robust models"],
+  ["Time horizon", "Work style", "Past & present", "Ongoing / always-on systems", "Future"],
+  ["Typical work cycle", "Work style", "Fast: hours to days per question", "Long-lived projects; on-call for failures", "Weeks to months per model or experiment"],
+  ["Success looks like", "Work style", "A decision was made because of your insight", "Pipelines run on time, data is trusted, nobody notices", "Model improves a metric (revenue, churn, accuracy) in production"],
+  ["When it goes wrong", "Work style", "Wrong numbers in a report → bad decision", "Pipeline breaks → everything downstream is stale", "Model is biased or drifts → bad automated decisions"],
+  ["Typical education", "Career", "Bachelor's in business, economics, stats, CS, or self-taught + certs", "Bachelor's in CS / software engineering or equivalent experience", "Often Master's/PhD in stats, CS, math, physics (not always required)"],
+  ["Entry barrier", "Career", "Lowest — most common entry point into data", "Medium-high — needs strong engineering", "Highest — needs math depth + coding"],
+  ["Relative pay", "Career", "$ – $$", "$$ – $$$", "$$ – $$$"],
+  ["Common certifications", "Career", "Google Data Analytics, Microsoft PL-300 (Power BI), Tableau", "AWS/GCP/Azure Data Engineer, Databricks, Snowflake SnowPro", "TensorFlow Developer, AWS ML Specialty, Azure Data Scientist"],
+  ["AI career risk", "AI", "Medium–High: routine SQL & reporting increasingly automated", "Low–Medium: AI writes boilerplate, but demand for data platforms grows", "Medium: standard modelling commoditised; GenAI & experimentation grow"],
+  ["How AI changes the job", "AI", "From report builder → decision partner & AI-output validator", "From pipeline coder → platform architect, incl. AI/RAG data", "From model builder → AI system designer & evaluator"],
+  ["Closely related roles", "Career", "BI Analyst, Analytics Engineer, Business Analyst", "Analytics Engineer, Platform Engineer, ML Engineer", "ML Engineer, Research Scientist, Quant, Applied Scientist"]
+];
+const table = document.getElementById("table");
+function renderTable(q = "") {
+  const re = q ? new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi") : null;
+  const hl = s => re ? s.replace(re, m => `<mark>${m}</mark>`) : s;
+  const rows = ROWS.filter(r => !re || r.join(" ").match(re));
+  table.innerHTML = `<tr><th>${t("Dimension")}</th>${KEYS.map(k => `<th class="${k}">${ROLES[k].icon} ${ROLES[k].name}</th>`).join("")}</tr>` +
+    (rows.length ? rows.map(r => `<tr><td>${hl(r[0])}<br><span class="catchip">${r[1]}</span></td><td>${hl(r[2])}</td><td>${hl(r[3])}</td><td>${hl(r[4])}</td></tr>`).join("")
+                 : `<tr><td colspan="4" style="text-align:center;color:var(--muted)">${t("No matches")}</td></tr>`);
+}
+document.getElementById("search").oninput = e => renderTable(e.target.value.trim());
+renderTable();
+
+/* ---------- SKILLS ---------- */
+const SKILLS = AR_ON ? AR.SKILLS : [
+  ["SQL", 9, 9, 7], ["Python / R", 5, 8, 9], ["Statistics", 5, 2, 9], ["Machine Learning", 2, 3, 9],
+  ["Software Eng.", 3, 10, 6], ["Cloud & Infra", 2, 9, 4], ["Data Visualisation", 10, 3, 6],
+  ["Business Acumen", 9, 5, 7], ["Communication", 9, 5, 7], ["Data Modelling", 5, 10, 5]
+];
+const active = { da: true, de: true, ds: true };
+function makeFilter(el, onChange) {
+  el.innerHTML = KEYS.map(k => `<label><input type="checkbox" data-k="${k}" checked><span class="dot" style="background:${ROLES[k].color}"></span>${ROLES[k].name}</label>`).join("");
+  el.querySelectorAll("input").forEach(i => i.onchange = () => onChange(i.dataset.k, i.checked));
+}
+makeFilter(document.getElementById("skillFilter"), (k, v) => { active[k] = v; drawSkills(); });
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function drawSkills() {
+  const svg = document.getElementById("radar"), cx = 220, cy = 220, R = 150, n = SKILLS.length;
+  const pt = (i, v) => { const a = -Math.PI / 2 + i * 2 * Math.PI / n; return [cx + Math.cos(a) * R * v / 10, cy + Math.sin(a) * R * v / 10]; };
+  let s = "";
+  [2, 4, 6, 8, 10].forEach(l => s += `<polygon points="${SKILLS.map((_, i) => pt(i, l).join(",")).join(" ")}" fill="none" stroke="#2c3256"/>`);
+  SKILLS.forEach((sk, i) => {
+    const [x, y] = pt(i, 10), [lx, ly] = pt(i, 12.3);
+    s += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#2c3256"/>`;
+    s += `<text x="${lx}" y="${ly}" fill="#9aa0c3" font-size="11.5" text-anchor="middle" dominant-baseline="middle">${sk[0]}</text>`;
+  });
+  KEYS.forEach((k, ri) => {
+    if (!active[k]) return;
+    const c = css("--" + k);
+    s += `<polygon class="radar-poly" points="${SKILLS.map((sk, i) => pt(i, sk[ri + 1]).join(",")).join(" ")}" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-width="2.5"/>`;
+    SKILLS.forEach((sk, i) => { const [x, y] = pt(i, sk[ri + 1]); s += `<circle cx="${x}" cy="${y}" r="3.5" fill="${c}"><title>${ROLES[k].name} – ${sk[0]}: ${sk[ri + 1]}/10</title></circle>`; });
+  });
+  svg.innerHTML = s;
+  document.getElementById("bars").innerHTML = SKILLS.map(sk => `<div class="bar-row"><div class="lbl"><span>${sk[0]}</span></div><div class="bar-track">` +
+    KEYS.map((k, ri) => active[k] ? `<div class="bar" title="${ROLES[k].name}: ${sk[ri + 1]}/10" style="--c:${ROLES[k].color};width:0" data-w="${sk[ri + 1] * 10}%"></div>` : "").join("") + `</div></div>`).join("");
+  requestAnimationFrame(() => document.querySelectorAll(".bar").forEach(b => b.style.width = b.dataset.w));
+}
+
+/* ---------- TOOLS ---------- */
+const TOOLS = {
+  "💾 Languages": [["SQL","da de ds"],["Python","da de ds"],["R","da ds"],["Scala","de"],["Java","de"],["Bash","de"],["DAX / M","da"]],
+  "📈 BI & Visualisation": [["Excel","da"],["Power BI","da"],["Tableau","da"],["Looker","da"],["Metabase","da"],["matplotlib / seaborn","da ds"],["Plotly","da ds"]],
+  "⚙️ Processing & Orchestration": [["Apache Spark","de ds"],["Airflow","de"],["dbt","de da"],["Kafka","de"],["Flink","de"],["Databricks","de ds"],["Fivetran / Airbyte","de"]],
+  "🏛️ Storage & Warehouses": [["Snowflake","de da ds"],["BigQuery","de da ds"],["Redshift","de da"],["PostgreSQL","de da"],["S3 / GCS / ADLS","de ds"],["Delta Lake / Iceberg","de"],["MongoDB","de"]],
+  "🤖 ML & Statistics": [["pandas / NumPy","da ds"],["scikit-learn","ds"],["PyTorch","ds"],["TensorFlow","ds"],["XGBoost","ds"],["statsmodels","ds da"],["MLflow","ds de"],["Hugging Face","ds"]],
+  "☁️ DevOps & Cloud": [["Git","de ds da"],["Docker","de ds"],["Kubernetes","de"],["Terraform","de"],["CI/CD","de"],["AWS / GCP / Azure","de ds"],["Jupyter","ds da"]]
+};
+const toolActive = { da: true, de: true, ds: true };
+makeFilter(document.getElementById("toolFilter"), (k, v) => { toolActive[k] = v; renderTools(); });
+function renderTools() {
+  document.getElementById("toolGrid").innerHTML = Object.entries(TOOLS).map(([cat, list]) =>
+    `<div class="toolcat"><h4>${t(cat)}</h4>${list.map(([t, w]) => {
+      const ks = w.split(" "), on = ks.some(k => toolActive[k]);
+      return `<span class="chip ${on ? "" : "dim"}">${t}<span class="dots">${ks.map(k => `<i style="background:${ROLES[k].color}" title="${ROLES[k].name}"></i>`).join("")}</span></span>`;
+    }).join("")}</div>`).join("");
+}
+renderTools();
+
+/* ---------- DAY IN LIFE ---------- */
+const DAY = AR_ON ? AR.DAY : {
+  da: { items: [["09:00","Check KPI dashboards; spot an unusual drop in weekend orders."],["10:00","Stand-up with marketing — they want to know if last week's campaign worked."],["11:00","Write SQL to join campaign, order and customer tables."],["13:00","Lunch & a quick Slack question: “Why does Finance's number differ from ours?”"],["14:00","Investigate metric definitions; reconcile the discrepancy."],["15:30","Build a Power BI page comparing campaign cohorts."],["17:00","Present findings: campaign lifted orders 6% in two regions — recommend expanding."]],
+        love: "Seeing your analysis directly change a decision; variety of questions.", hard: "Conflicting metric definitions, last-minute urgent requests, messy source data." },
+  de: { items: [["09:00","Check Airflow: overnight pipeline failed — an upstream API changed its schema."],["09:30","Hotfix the parser, backfill missing partitions, notify downstream users."],["11:00","Design review for a new real-time order events stream (Kafka → warehouse)."],["13:00","Lunch."],["14:00","Write dbt models + data-quality tests for the new orders table."],["15:30","Code review a teammate's PR; optimise a slow Spark job to cut cloud cost 30%."],["17:00","Update documentation and data catalog; hand over on-call notes."]],
+        love: "Building systems at scale; solving hard technical puzzles; clear engineering craft.", hard: "On-call firefighting; invisible when things work, blamed when they break." },
+  ds: { items: [["09:00","Review overnight model-training results and evaluation metrics."],["10:00","Meet product team about predicting customer churn."],["11:00","Exploratory analysis in Jupyter; engineer features like “days since last order”."],["13:00","Lunch & read a paper on a new forecasting technique."],["14:00","Train & compare models (logistic regression vs gradient boosting); tune hyperparameters."],["15:30","Design an A/B test to measure if targeted offers reduce churn."],["17:00","Sync with ML engineer about deploying the model behind an API."]],
+        love: "Research, experimentation, and building things that predict the future.", hard: "Models that never reach production; unclear problem framing; data that isn't ready." }
+};
+const dayTabs = document.getElementById("dayTabs");
+dayTabs.innerHTML = KEYS.map((k, i) => `<button style="--c:${ROLES[k].color}" class="${i ? "" : "active"}" data-k="${k}">${ROLES[k].icon} ${ROLES[k].name}</button>`).join("");
+function showDay(k) {
+  const d = DAY[k];
+  document.getElementById("dayContent").innerHTML = `<div class="timeline" style="--c:${ROLES[k].color}">${d.items.map(([t, x]) => `<div class="tl-item"><span class="time">${t}</span> — ${x}</div>`).join("")}</div>
+    <div class="split"><div><b>${t("💚 What people love")}</b><br>${d.love}</div><div><b>${t("😓 What's hard")}</b><br>${d.hard}</div></div>`;
+}
+dayTabs.querySelectorAll("button").forEach(b => b.onclick = () => { dayTabs.querySelectorAll("button").forEach(x => x.classList.remove("active")); b.classList.add("active"); showDay(b.dataset.k); });
+showDay("da");
+
+/* ---------- SCENARIOS ---------- */
+const SCEN = AR_ON ? AR.SCEN : [
+  { t: "Customer churn is rising", d: "Subscriptions cancelled are up 15% this quarter. Leadership wants to act.",
+    da: ["Diagnose the drop", "Segments churn by region, plan, tenure and acquisition channel. Finds churn concentrated in users who joined via a discount promo.", "Churn dashboard + deck with root cause", "SELECT channel, COUNT(*) FILTER (WHERE churned)::float / COUNT(*) AS churn_rate\nFROM customers GROUP BY channel ORDER BY 2 DESC;"],
+    de: ["Make the data available", "Builds a pipeline joining app events, billing and support tickets into a clean daily customer table so churn can be measured reliably.", "customer_daily table + Airflow DAG + data tests", "@dag(schedule='@daily')\ndef customer_churn_pipeline():\n    extract_billing() >> transform_dbt() >> run_quality_checks()"],
+    ds: ["Predict & prevent", "Trains a model to score each customer's churn risk, then designs an A/B test giving high-risk users a retention offer.", "Churn-risk model + experiment results", "model = GradientBoostingClassifier()\nmodel.fit(X_train, y_train)\nroc_auc_score(y_test, model.predict_proba(X_test)[:,1])"] },
+  { t: "Plan delivery capacity for next month", d: "Operations needs to know how many riders/drivers to schedule per zone.",
+    da: ["Look at the past", "Analyses historical order volume by zone, weekday and hour; highlights peak times and seasonal patterns.", "Heatmap dashboard of demand by zone/hour", "SELECT zone, EXTRACT(dow FROM ts) d, EXTRACT(hour FROM ts) h, COUNT(*)\nFROM orders GROUP BY 1,2,3;"],
+    de: ["Real-time data feed", "Streams live order and rider GPS events into the warehouse with minute-level freshness for ops tools.", "Kafka → warehouse streaming pipeline", "orders_stream.writeStream.format('delta')\n  .option('checkpointLocation', ckpt).start(path)"],
+    ds: ["Forecast demand", "Builds a time-series forecasting model per zone including weather and holidays; outputs expected orders per hour with confidence bands.", "Forecast model feeding the scheduling tool", "from prophet import Prophet\nm = Prophet().add_country_holidays('AE')\nm.fit(df); forecast = m.predict(future)"] },
+  { t: "Launch a product recommendation feature", d: "The app wants to show 'You might also like…' to increase basket size.",
+    da: ["Measure the impact", "Defines success metrics (basket size, CTR), builds tracking dashboard, reports the uplift after launch.", "Feature performance dashboard", "SELECT variant, AVG(basket_value)\nFROM orders JOIN experiments USING(user_id)\nGROUP BY variant;"],
+    de: ["Serve the data fast", "Builds the event tracking, feature pipelines and low-latency store so recommendations can be served in milliseconds.", "Event tracking + feature store + API", "redis.hset(f'user:{uid}:features', mapping=features)"],
+    ds: ["Build the recommender", "Develops a collaborative-filtering / embedding model of item similarity and evaluates offline before an online A/B test.", "Recommendation model + offline/online evaluation", "from implicit.als import AlternatingLeastSquares\nmodel = AlternatingLeastSquares(factors=64)\nmodel.fit(user_item_matrix)"] }
+];
+const sel = document.getElementById("scenSelect");
+sel.innerHTML = SCEN.map((s, i) => `<option value="${i}">${s.t}</option>`).join("");
+function showScen(i) {
+  const s = SCEN[i];
+  document.getElementById("scenDesc").textContent = s.d;
+  document.getElementById("scenAnswers").innerHTML = KEYS.map(k => {
+    const [h, body, deliv, code] = s[k];
+    return `<div class="answer" style="--c:${ROLES[k].color}"><h4>${ROLES[k].icon} ${ROLES[k].name}: ${h}</h4>${body}
+      <pre>${code.replace(/</g, "&lt;")}</pre><div class="deliv">${t("📦 Deliverable:")} ${deliv}</div></div>`;
+  }).join("");
+}
+sel.onchange = e => showScen(e.target.value);
+showScen(0);
+
+/* ---------- CAREER ---------- */
+const LADDERS = AR_ON ? AR.LADDERS : {
+  da: ["Junior / Associate Analyst","Data Analyst","Senior Analyst","Lead Analyst / Analytics Manager","Head of Analytics / Director of BI"],
+  de: ["Junior Data Engineer","Data Engineer","Senior Data Engineer","Staff / Principal Engineer or DE Manager","Head of Data Platform / Data Architect"],
+  ds: ["Junior / Associate Data Scientist","Data Scientist","Senior Data Scientist","Staff / Principal DS or DS Manager","Head of Data Science / Chief Data Officer"]
+};
+document.getElementById("ladders").innerHTML = KEYS.map(k => `<div class="ladder" style="--c:${ROLES[k].color}"><h4>${ROLES[k].icon} ${ROLES[k].name}</h4>${LADDERS[k].map((r, i) => `<div class="rung"><b>${i + 1}</b>${r}</div>`).join("")}</div>`).join("");
+const METERS = AR_ON ? AR.METERS : [["Entry barrier", 2, 4, 5], ["Starting pay", 2, 4, 4], ["Senior pay ceiling", 3, 5, 5], ["Market demand", 4, 5, 4], ["Coding intensity", 2, 5, 4], ["Math intensity", 2, 1, 5], ["Stakeholder contact", 5, 2, 4]];
+document.getElementById("meters").innerHTML = METERS.map(([l, ...v]) => `<div style="margin-bottom:8px"><b style="font-size:.9rem">${l}</b>` +
+  KEYS.map((k, i) => `<div class="meter" style="--c:${ROLES[k].color}"><span class="m-l">${ROLES[k].name}</span><span class="m-b">${[1,2,3,4,5].map(n => `<span class="${n <= v[i] ? "on" : ""}"></span>`).join("")}</span></div>`).join("") + `</div>`).join("");
+document.getElementById("moves").innerHTML = (AR_ON ? AR.MOVES : [
+  "<b>Analyst → Analytics Engineer → Data Engineer:</b> grow from SQL into dbt, pipelines and software practices.",
+  "<b>Analyst → Data Scientist:</b> deepen statistics, Python and machine learning.",
+  "<b>Software Engineer → Data Engineer:</b> very common; engineering skills transfer directly.",
+  "<b>Data Scientist → ML Engineer:</b> focus on deploying, scaling and monitoring models.",
+  "<b>Any → Management / Product:</b> lead teams or become a data product manager."
+]).map(x => `<li style="margin-bottom:6px">${x}</li>`).join("");
+
+/* ---------- AI IMPACT ---------- */
+const AI = AR_ON ? AR.AI : {
+  da: { risk: 60, level: "Medium–High",
+        why: "Text-to-SQL, AI copilots in Power BI/Tableau and chat-with-your-data tools already handle routine queries and standard dashboards. Analysts who mainly <i>produce reports</i> are most exposed; those who <i>own decisions and business context</i> become more valuable.",
+        tasks: [["Writing standard SQL queries", 75, "LLMs generate correct SQL for most well-documented schemas; humans still verify logic and metric definitions."],
+                ["Building routine dashboards & reports", 70, "BI copilots create charts and pages from a prompt; self-service reduces report requests."],
+                ["Data cleaning in Excel/SQL", 60, "AI suggests and applies fixes, but edge cases still need judgement."],
+                ["Writing summaries of results", 65, "AI drafts narrative text from charts; the analyst checks accuracy and tone."],
+                ["Ad-hoc exploration", 45, "AI speeds exploration; knowing which question matters stays human."],
+                ["Defining metrics & KPIs", 20, "Requires agreement across teams and deep business understanding."],
+                ["Influencing stakeholders & decisions", 10, "Trust, negotiation and context are human strengths."],
+                ["Validating AI output / data quality", 15, "A growing task: someone must catch confident but wrong answers."]],
+        shift: { auto: ["Routine weekly/monthly reports", "Simple SQL & pivot tables", "First-draft charts and commentary"],
+                 aug: ["Faster deep-dives with AI copilots", "Python analysis without being a coder", "Larger scope per analyst"],
+                 next: ["Analytics Engineer", "AI-enabled Product/Business Analyst", "Decision Scientist", "Owner of the semantic layer / metric store"] },
+        fp: [["Deep domain expertise (e.g. finance, ops, marketing)", 12], ["Own a metric definition / semantic layer", 10], ["Learn dbt or Python beyond basics", 8], ["Run experiments / basic causal analysis", 8], ["Use AI copilots daily and review their output critically", 8], ["Present recommendations to leadership regularly", 8]] },
+  de: { risk: 30, level: "Low–Medium",
+        why: "AI writes boilerplate pipeline code, SQL transformations and tests, but someone must design reliable, secure, cost-efficient systems. AI itself <i>needs</i> more data infrastructure (vector DBs, RAG pipelines, feature stores), so demand is rising.",
+        tasks: [["Writing boilerplate ETL code", 65, "Copilots generate connectors, dbt models and Spark code quickly."],
+                ["Writing unit/data-quality tests", 55, "AI drafts tests well; humans decide what really must be guaranteed."],
+                ["Documentation & data catalog", 60, "AI auto-generates column descriptions and lineage summaries."],
+                ["Debugging failed pipelines", 40, "AI helps read logs and suggest fixes; root cause in complex systems still needs engineers."],
+                ["System & architecture design", 15, "Trade-offs of cost, scale, latency and governance need experience."],
+                ["Data governance, privacy & security", 15, "Regulation and accountability stay with people."],
+                ["Cost optimisation at scale", 25, "AI hints help, but decisions involve business trade-offs."],
+                ["Building data platforms for AI (RAG, vectors)", 10, "A new, fast-growing area of work."]],
+        shift: { auto: ["Hand-written boilerplate connectors", "Basic SQL transformations", "Writing docs from scratch"],
+                 aug: ["Faster development & migrations", "AI-assisted incident triage", "More pipelines per engineer"],
+                 next: ["AI/LLM Data Engineer (RAG, embeddings)", "Data Platform Engineer", "MLOps / LLMOps Engineer", "Data Governance Engineer"] },
+        fp: [["Strong system design & distributed systems", 8], ["Cloud cost & FinOps skills", 5], ["Build RAG / vector database pipelines", 7], ["Data governance, privacy & security knowledge", 5], ["Use AI coding assistants effectively", 5]] },
+  ds: { risk: 45, level: "Medium",
+        why: "AutoML and foundation models (LLMs, vision models) mean many standard models no longer need to be built from scratch. Classic 'train a classifier' work is exposed, while experimentation, causal inference, evaluation and GenAI applications are growing.",
+        tasks: [["Standard model training & tuning", 65, "AutoML and AI assistants can train and tune strong baselines in minutes."],
+                ["Feature engineering", 50, "AI suggests features; domain-driven features still need humans."],
+                ["Writing analysis code in notebooks", 65, "Copilots write most pandas/sklearn code."],
+                ["NLP/vision models from scratch", 70, "Often replaced by prompting or fine-tuning pre-trained models."],
+                ["Problem framing with the business", 15, "Choosing the right problem and success metric is human work."],
+                ["Experiment design & causal inference", 20, "Requires statistical rigour and judgement about confounders."],
+                ["Evaluating AI/LLM systems & bias", 15, "A growing need: measuring quality, safety and fairness."],
+                ["Communicating uncertainty & impact", 15, "Explaining trade-offs to decision-makers stays human."]],
+        shift: { auto: ["Baseline modelling", "Boilerplate notebook code", "Many bespoke NLP models"],
+                 aug: ["Faster prototyping with LLMs", "Quicker literature & code search", "Broader scope per scientist"],
+                 next: ["Applied AI / GenAI Scientist", "AI Evaluation Scientist", "ML Engineer", "Causal Inference / Experimentation Specialist"] },
+        fp: [["Experimentation & causal inference", 9], ["LLM fine-tuning, prompting & evaluation", 9], ["Ship models to production (MLOps)", 8], ["Strong business problem framing", 8], ["Responsible AI (bias, fairness, safety)", 6]] }
+};
+const riskColor = v => v >= 55 ? "#ef4444" : v >= 35 ? "#f59e0b" : "#22c55e";
+function arc(a, b, col) {
+  const p = t => [110 - 90 * Math.cos(Math.PI * t), 110 - 90 * Math.sin(Math.PI * t)];
+  const [x1, y1] = p(a), [x2, y2] = p(b);
+  return `<path d="M${x1} ${y1} A90 90 0 0 1 ${x2} ${y2}" stroke="${col}" stroke-width="16" fill="none"/>`;
+}
+document.getElementById("gauges").innerHTML = KEYS.map(k => {
+  const a = AI[k];
+  return `<div class="gauge" style="--c:${ROLES[k].color}"><h4>${ROLES[k].icon} ${ROLES[k].name}</h4>
+    <svg viewBox="0 0 220 130" width="220">${arc(0, .35, "#22c55e")}${arc(.35, .55, "#f59e0b")}${arc(.55, 1, "#ef4444")}
+      <g class="needle" data-r="${a.risk}" style="transform:rotate(-90deg)"><line x1="110" y1="110" x2="110" y2="32" stroke="#fff" stroke-width="4" stroke-linecap="round"/></g>
+      <circle cx="110" cy="110" r="8" fill="#fff"/></svg>
+    <div class="lvl" style="color:${riskColor(a.risk)}">${t("Career risk:")} ${a.level}</div>
+    <div class="why">${a.why}</div></div>`;
+}).join("");
+function animateAI() {
+  document.querySelectorAll(".needle").forEach(n => { n.style.transform = "rotate(-90deg)"; requestAnimationFrame(() => setTimeout(() => n.style.transform = `rotate(${-90 + n.dataset.r * 1.8}deg)`, 50)); });
+  showAITasks(document.querySelector("#aiTabs .active").dataset.k);
+}
+const aiTabs = document.getElementById("aiTabs");
+aiTabs.innerHTML = KEYS.map((k, i) => `<button style="--c:${ROLES[k].color}" class="${i ? "" : "active"}" data-k="${k}">${ROLES[k].icon} ${ROLES[k].name}</button>`).join("");
+function showAITasks(k) {
+  const el = document.getElementById("aiTasks");
+  el.innerHTML = [...AI[k].tasks].sort((a, b) => b[1] - a[1]).map(([t, p, n]) =>
+    `<div class="task" onclick="this.classList.toggle('open')"><span>${t}</span><div class="tb"><div data-w="${p}%" style="background:${riskColor(p)}"></div></div><b style="color:${riskColor(p)}">${p}%</b><div class="note">💡 ${n}</div></div>`).join("") +
+    `<p style="color:var(--muted);font-size:.82rem">${t("Click a task for the reasoning.")}</p>`;
+  requestAnimationFrame(() => el.querySelectorAll(".tb div").forEach(d => d.style.width = d.dataset.w));
+}
+aiTabs.querySelectorAll("button").forEach(b => b.onclick = () => { aiTabs.querySelectorAll("button").forEach(x => x.classList.remove("active")); b.classList.add("active"); showAITasks(b.dataset.k); });
+document.getElementById("aiShift").innerHTML = KEYS.map(k => {
+  const s = AI[k].shift;
+  return `<div class="answer" style="--c:${ROLES[k].color}"><h4>${ROLES[k].icon} ${ROLES[k].name}</h4>
+    <b style="color:#ef4444">${t("⬇ Shrinking")}</b><ul class="shift-list">${s.auto.map(x => `<li>${x}</li>`).join("")}</ul>
+    <b style="color:#f59e0b">${t("⚡ Supercharged by AI")}</b><ul class="shift-list">${s.aug.map(x => `<li>${x}</li>`).join("")}</ul>
+    <b style="color:#22c55e">${t("⬆ Growing / new roles")}</b><ul class="shift-list">${s.next.map(x => `<li>${x}</li>`).join("")}</ul></div>`;
+}).join("");
+const fpTabs = document.getElementById("fpTabs");
+fpTabs.innerHTML = KEYS.map((k, i) => `<button style="--c:${ROLES[k].color}" class="${i ? "" : "active"}" data-k="${k}">${ROLES[k].icon} ${ROLES[k].name}</button>`).join("");
+function showFP(k) {
+  const a = AI[k], box = document.getElementById("fpBox");
+  box.innerHTML = `<div><b>${t("Your estimated risk:")} <span id="fpVal"></span></b></div><div class="fp-meter"><div id="fpBar"></div></div>` +
+    a.fp.map(([t, v], i) => `<label><input type="checkbox" data-v="${v}"> <span>${t} <span style="color:#22c55e;font-size:.8rem">(−${v})</span></span></label>`).join("");
+  const upd = () => {
+    const r = Math.max(5, a.risk - [...box.querySelectorAll("input:checked")].reduce((s, i) => s + +i.dataset.v, 0));
+    box.querySelector("#fpVal").innerHTML = `<span style="color:${riskColor(r)}">${r}/100 ${t(r >= 55 ? "— high" : r >= 35 ? "— moderate" : "— low")}</span>`;
+    const bar = box.querySelector("#fpBar"); bar.style.width = r + "%"; bar.style.background = riskColor(r);
+  };
+  box.querySelectorAll("input").forEach(i => i.onchange = upd); upd();
+}
+fpTabs.querySelectorAll("button").forEach(b => b.onclick = () => { fpTabs.querySelectorAll("button").forEach(x => x.classList.remove("active")); b.classList.add("active"); showFP(b.dataset.k); });
+showFP("da");
+const AI_ROWS = AR_ON ? AR.AI_ROWS : [
+  ["Overall AI career risk", "Medium–High", "Low–Medium", "Medium"],
+  ["Most exposed tasks", "Standard SQL, routine dashboards, report writing", "Boilerplate ETL code, docs, simple tests", "Baseline models, notebook code, bespoke NLP"],
+  ["Safest tasks", "Metric definitions, stakeholder influence, decision ownership", "Architecture, governance, reliability, cost", "Problem framing, experiments, causal inference, AI evaluation"],
+  ["Effect of AI on demand", "Fewer pure report builders; more demand for business-savvy analysts", "Rising — AI needs more and better data pipelines", "Shifting from classic ML to GenAI, evaluation and experimentation"],
+  ["Most at-risk profile", "Junior analyst doing only recurring reports", "Engineer only writing simple, repetitive SQL jobs", "Modeller who only trains standard models on clean data"],
+  ["Key skill to add now", "Domain expertise + dbt/semantic layer + AI copilots", "RAG/vector pipelines, platform & system design", "LLM evaluation, MLOps, causal inference"]
+];
+document.getElementById("aiTable").innerHTML = `<tr><th>${t("AI angle")}</th>${KEYS.map(k => `<th class="${k}">${ROLES[k].icon} ${ROLES[k].name}</th>`).join("")}</tr>` +
+  AI_ROWS.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join("");
+
+/* ---------- MYTHS ---------- */
+const MYTHS = AR_ON ? AR.MYTHS : [
+  ["Data analysts just make charts.", "Charts are the output. The real work is framing the right question, getting correct numbers and turning them into a decision."],
+  ["Data scientists spend all day building fancy AI models.", "Much of the time goes to cleaning data, framing problems and communicating results. Modelling is often the smaller share."],
+  ["Data engineering is just moving files around.", "It's software engineering for data: distributed systems, reliability, cost, security, data modelling and governance."],
+  ["You need a PhD to work in data science.", "Helpful for research roles, but many data scientists have a Bachelor's or Master's plus strong practical experience."],
+  ["AI will replace data analysts.", "AI speeds up querying and charting, but understanding the business, validating numbers and influencing people remain human work."],
+  ["These are three completely separate jobs.", "Boundaries overlap. In startups one person often does all three; titles also vary widely between companies."]
+];
+document.getElementById("flips").innerHTML = MYTHS.map(([m, r]) => `<div class="flip" onclick="this.classList.toggle('flipped')"><div class="flip-inner">
+  <div class="face front"><span class="lbl">${t("MYTH")}</span><p style="font-size:1.05rem">${m}</p><span style="color:var(--muted);font-size:.8rem">${t("click to reveal ↻")}</span></div>
+  <div class="face back"><span class="lbl">${t("REALITY")}</span><p style="font-size:.95rem">${r}</p></div></div></div>`).join("");
+
+/* ---------- QUIZ ---------- */
+const QUIZ = AR_ON ? AR.QUIZ : [
+  ["What sounds most satisfying?", [["Presenting an insight that changes a business decision","da"],["Building a system that processes millions of records flawlessly","de"],["Training a model that accurately predicts the future","ds"]]],
+  ["Pick a favourite subject:", [["Business & economics","da"],["Computer science & systems","de"],["Statistics & mathematics","ds"]]],
+  ["How do you prefer to work?", [["Lots of people, quick questions, variety","da"],["Deep focus on technical architecture","de"],["Research-style investigation over weeks","ds"]]],
+  ["Which tool excites you most?", [["Power BI / Tableau","da"],["Airflow / Spark / Kafka","de"],["PyTorch / scikit-learn","ds"]]],
+  ["A report shows a weird number. Your first instinct:", [["Figure out what it means for the business","da"],["Trace which pipeline step broke","de"],["Check whether it's a statistical outlier","ds"]]],
+  ["What would you rather write?", [["A clear story with charts for executives","da"],["Clean, tested, production code","de"],["An experiment design & analysis","ds"]]],
+  ["Your ideal achievement:", [["“Our sales strategy changed because of my analysis”","da"],["“Our data platform never goes down”","de"],["“My model raised revenue 5%”","ds"]]],
+  ["How do you feel about maths?", [["Comfortable with basics, I'd rather focus on business","da"],["It's fine, but I love building things more","de"],["I love probability, linear algebra and proofs","ds"]]]
+];
+let qi = 0, score = { da: 0, de: 0, ds: 0 };
+const qb = document.getElementById("quizBox");
+function renderQuiz() {
+  if (qi >= QUIZ.length) return renderResult();
+  const [q, opts] = QUIZ[qi];
+  const shuffled = [...opts].sort(() => Math.random() - .5);
+  qb.innerHTML = `<div class="progress"><div style="width:${qi / QUIZ.length * 100}%"></div></div>
+    <div style="color:var(--muted);font-size:.85rem">${t("Question")} ${qi + 1} ${t("of")} ${QUIZ.length}</div>
+    <div class="q">${q}</div>${shuffled.map(([t, k]) => `<button class="opt" data-k="${k}">${t}</button>`).join("")}`;
+  qb.querySelectorAll(".opt").forEach(b => b.onclick = () => { score[b.dataset.k]++; qi++; renderQuiz(); });
+}
+function renderResult() {
+  const best = KEYS.reduce((a, b) => score[b] > score[a] ? b : a);
+  const r = ROLES[best];
+  qb.innerHTML = `<div class="progress"><div style="width:100%"></div></div>
+    <div style="text-align:center"><div style="font-size:3rem">${r.icon}</div>
+    <h3 style="color:${r.color};margin:4px 0">${t("You lean towards:")} ${r.name}</h3><p style="color:var(--muted)">${r.summary}</p></div>
+    ${KEYS.map(k => `<div class="result-bar" style="--c:${ROLES[k].color}"><span class="n">${ROLES[k].name}</span><div class="t"><div data-w="${score[k] / QUIZ.length * 100}%"></div></div><span>${Math.round(score[k] / QUIZ.length * 100)}%</span></div>`).join("")}
+    <div style="text-align:center"><button class="btn" id="retry">${t("Retake quiz")}</button></div>`;
+  requestAnimationFrame(() => qb.querySelectorAll(".t div").forEach(d => d.style.width = d.dataset.w));
+  document.getElementById("retry").onclick = () => { qi = 0; score = { da: 0, de: 0, ds: 0 }; renderQuiz(); };
+}
+renderQuiz();
+</script>
+</body>
+</html>
