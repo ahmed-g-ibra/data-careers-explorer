@@ -245,6 +245,26 @@
   .up-week { display: flex; gap: 4px; border-radius: 10px; overflow: hidden; }
   .up-week span { padding: 10px; color: #111; font-size: .82rem; text-align: center; }
 
+  /* Two-career path */
+  .pp-sum { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 12px; }
+  .pp-sum div { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; }
+  .pp-sum small { color: var(--muted); font-size: .78rem; } .pp-sum b { font-size: 1.6rem; }
+  .pp-bar { display: flex; height: 32px; border-radius: 8px; overflow: hidden; gap: 2px; margin-bottom: 8px; }
+  .pp-bar span { display: flex; align-items: center; justify-content: center; color: #111; font-size: .78rem; font-weight: 700; white-space: nowrap; overflow: hidden; padding: 0 6px; }
+  .pp-shared { background: var(--panel); border: 2px solid #8b93d6; border-radius: 16px; padding: 16px; }
+  .pp-stage { margin-bottom: 6px; }
+  .pp-mod { background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+  .pp-mod.known { opacity: .45; } .pp-mod.known b { text-decoration: line-through; }
+  .pp-mh { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+  .pp-w { font-size: .78rem; color: var(--muted); white-space: nowrap; }
+  .pp-w .dots i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-inline-start: 3px; }
+  .pp-d { font-size: .87rem; margin: 4px 0; } .pp-c { font-size: .82rem; } .pp-c small { color: var(--muted); }
+  .pp-k { display: inline-flex; gap: 6px; align-items: center; font-size: .8rem; color: var(--muted); margin-top: 6px; cursor: pointer; }
+  .pp-k input { accent-color: #4ade80; }
+  .pp-fork { text-align: center; font-weight: 700; margin-bottom: 10px; }
+  .pp-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+  .pp-branch { background: var(--panel); border: 2px solid var(--c); border-radius: 16px; padding: 16px; }
+
   /* Language toggle & RTL */
   header { position: relative; }
   .langbtn { position: absolute; top: 14px; right: 16px; background: var(--panel2); color: var(--text); border: 1px solid #4a5290; padding: 7px 14px; border-radius: 999px; cursor: pointer; font-size: .9rem; }
@@ -440,6 +460,15 @@
     <p style="color:var(--muted);font-size:.82rem" id="upNote"></p>
   </section>
 
+  <!-- TWO-CAREER PATH -->
+  <section id="pair">
+    <h2 id="ppTitle"></h2>
+    <p class="sub" id="ppSub"></p>
+    <div class="pair" id="ppPick"></div>
+    <div id="ppOut"></div>
+    <p style="color:var(--muted);font-size:.82rem" id="ppNote"></p>
+  </section>
+
   <!-- MYTHS -->
   <section id="myths">
     <h2>Myths vs reality</h2>
@@ -539,7 +568,7 @@ window.AR = {
 
   SECTIONS: [["overview","نظرة عامة"],["pipeline","دورة البيانات"],["compare","مقارنة شاملة"],["skills","المهارات"],
     ["tools","الأدوات"],["day","يوم في الحياة"],["scenario","نفس المشكلة"],["career","المسار والأجر"],
-    ["ai","🤖 أثر الذكاء الاصطناعي"],["paths","🎓 مسارات التعلّم"],["unified","🧩 المسار الموحّد"],["myths","خرافات"],["quiz","أيّها يناسبني؟"]],
+    ["ai","🤖 أثر الذكاء الاصطناعي"],["paths","🎓 مسارات التعلّم"],["unified","🧩 المسار الموحّد"],["pair","🔀 مسار مسارين"],["myths","خرافات"],["quiz","أيّها يناسبني؟"]],
 
   ANALOGY: {
     de: "<b>بنّاء المطبخ وسلسلة التوريد.</b> يوفّر المكوّنات، ويبني المطبخ والتمديدات والثلاجات حتى يصل كل شيء طازجًا وفي وقته.",
@@ -749,7 +778,7 @@ if (AR_ON) KEYS.forEach(k => Object.assign(ROLES[k], AR.ROLES[k]));
 const SECTIONS = AR_ON ? AR.SECTIONS : [
   ["overview","Overview"],["pipeline","Lifecycle"],["compare","Compare all"],["skills","Skills"],
   ["tools","Tools"],["day","Day in life"],["scenario","Same problem"],["career","Career & pay"],
-  ["ai","🤖 AI impact"],["paths","🎓 Learning paths"],["unified","🧩 Unified path"],["myths","Myths"],["quiz","Which fits me?"]
+  ["ai","🤖 AI impact"],["paths","🎓 Learning paths"],["unified","🧩 Unified path"],["pair","🔀 Two-career path"],["myths","Myths"],["quiz","Which fits me?"]
 ];
 const nav = document.getElementById("nav");
 SECTIONS.forEach(([id, label], i) => {
@@ -1305,9 +1334,11 @@ const LP_AR = {
 const LP = AR_ON ? LP_AR : LP_EN;
 const LK = ["da", "de", "ds", "devops"];
 const LROLE = k => k === "devops" ? { name: LP.devops.name, icon: LP.devops.icon, color: "var(--do)" } : ROLES[k];
+// saved in localStorage; falls back to memory when the browser blocks storage
+const memStore = {};
 const store = {
-  get(k) { try { return localStorage.getItem(k) === "1"; } catch (e) { return false; } },
-  set(k, v) { try { v ? localStorage.setItem(k, "1") : localStorage.removeItem(k); } catch (e) {} }
+  get(k) { try { return localStorage.getItem(k) === "1"; } catch (e) { return !!memStore[k]; } },
+  set(k, v) { memStore[k] = v; try { v ? localStorage.setItem(k, "1") : localStorage.removeItem(k); } catch (e) {} }
 };
 [["lpTitle", "title"], ["lpSub", "sub"], ["lpTrunkH", "trunkH"], ["lpPathH", "pathH"], ["lpPathSub", "pathSub"],
  ["lpMatrixH", "matrixH"], ["lpMatrixSub", "matrixSub"], ["lpDevH", "devH"], ["lpDevSub", "devSub"], ["lpNote", "note"]]
@@ -1611,6 +1642,143 @@ showSwitch();
 document.getElementById("upHabits").innerHTML = UP.habits.map(([i, h, b]) => `<div class="up-why"><span>${i}</span><b>${h}</b><small>${b}</small></div>`).join("");
 document.getElementById("upWeek").innerHTML = UP.week.map(([l, h], i) => `<span style="flex:${h};background:${["#3ba7ff", "#ff8a3d", "#b46cff", "#2dd4bf"][i]}">${l}<br><b>${h} h</b></span>`).join("");
 function animateUP() { document.querySelectorAll(".up-cov .fp-meter div").forEach(d => { d.style.width = 0; requestAnimationFrame(() => setTimeout(() => d.style.width = d.dataset.w, 50)); }); }
+
+/* ---------- TWO-CAREER PATH: pick two, get the shared road and each branch ---------- */
+// [id, stage, weeks, roles, en name, en detail, ar name, ar detail, courses [name, provider, free]]
+const PP_MODS = [
+  ["git", 1, 2, "da de ds devops", "Git & GitHub", "Commits, branches, pull requests, code review, merge conflicts.", "Git و GitHub", "الحفظ والفروع وطلبات الدمج ومراجعة الكود وحل التعارضات.", [["Introduction to GitHub", "GitHub Skills", 1], ["Pro Git (book)", "git-scm.com", 1]]],
+  ["python", 1, 6, "da de ds devops", "Python programming", "Data types, functions, modules, files, error handling, virtual environments, packages.", "البرمجة بـ Python", "أنواع البيانات والدوال والوحدات والملفات ومعالجة الأخطاء والبيئات الافتراضية والحزم.", [["Python for Everybody", "University of Michigan, Coursera", 0], ["Automate the Boring Stuff with Python", "Al Sweigart (free online)", 1]]],
+  ["linux", 1, 3, "de ds devops", "Linux & Bash", "Terminal, file system, permissions, processes, pipes, shell scripts, SSH.", "Linux و Bash", "الطرفية ونظام الملفات والصلاحيات والعمليات والأنابيب والسكربتات و SSH.", [["Introduction to Linux (LFS101)", "Linux Foundation", 1], ["The Missing Semester", "MIT", 1]]],
+  ["sqlb", 1, 4, "da de ds", "SQL fundamentals", "SELECT, filtering, joins, GROUP BY, subqueries.", "أساسيات SQL", "الاستعلام والتصفية والربط والتجميع والاستعلامات الفرعية.", [["Intro to SQL", "Kaggle Learn", 1], ["SQLBolt", "sqlbolt.com", 1]]],
+  ["stats", 1, 4, "da ds", "Statistics fundamentals", "Distributions, mean/median/variance, sampling, correlation, confidence intervals.", "أساسيات الإحصاء", "التوزيعات والمتوسط والوسيط والتباين والعيّنات والارتباط وفترات الثقة.", [["Statistics & Probability", "Khan Academy", 1], ["Introduction to Statistics", "Stanford, Coursera", 0]]],
+  ["net", 1, 3, "de devops", "Networking basics", "TCP/IP, DNS, HTTP/HTTPS, ports, firewalls, REST APIs.", "أساسيات الشبكات", "TCP/IP و DNS و HTTP/HTTPS والمنافذ والجدران النارية وواجهات REST.", [["The Bits and Bytes of Computer Networking", "Google, Coursera", 0]]],
+  ["excel", 1, 2, "da", "Excel & spreadsheets", "Formulas, lookups, pivot tables, charts, data cleaning.", "Excel والجداول", "الصيغ ودوال البحث والجداول المحورية والرسوم وتنظيف البيانات.", [["Excel Skills for Business", "Macquarie University, Coursera", 0]]],
+  ["sqla", 2, 3, "da de", "Advanced SQL", "CTEs, window functions, query plans and performance.", "SQL المتقدّم", "CTEs ودوال النوافذ وخطط التنفيذ والأداء.", [["Advanced SQL", "Kaggle Learn", 1], ["SQL practice", "StrataScratch / LeetCode", 1]]],
+  ["pandas", 2, 3, "da de ds", "pandas & NumPy", "Loading, cleaning, reshaping and aggregating tabular data in Python.", "pandas و NumPy", "تحميل البيانات الجدولية وتنظيفها وإعادة تشكيلها وتجميعها بـ Python.", [["Pandas", "Kaggle Learn", 1], ["Python for Data Analysis (book)", "Wes McKinney (free online)", 1]]],
+  ["model", 2, 3, "da de", "Data modelling", "Normalisation, star & snowflake schemas, facts and dimensions, slowly changing dimensions.", "نمذجة البيانات", "التطبيع و Star و Snowflake schema وجداول الحقائق والأبعاد والأبعاد المتغيّرة ببطء.", [["The Data Warehouse Toolkit (book)", "Kimball", 0]]],
+  ["cloud", 2, 4, "de ds devops", "Cloud fundamentals", "Compute, object storage, managed databases, IAM, regions, pricing (AWS / Azure / GCP).", "أساسيات السحابة", "الحوسبة والتخزين وقواعد البيانات المُدارة والصلاحيات والمناطق والتسعير (AWS / Azure / GCP).", [["AWS Cloud Practitioner Essentials", "AWS Skill Builder", 1], ["AWS Certified Cloud Practitioner / AZ-900", "AWS / Microsoft", 0]]],
+  ["docker", 2, 3, "de ds devops", "Docker & containers", "Images, Dockerfiles, volumes, networks, docker-compose.", "Docker والحاويات", "الصور وملفات Dockerfile والمجلدات والشبكات و docker-compose.", [["Docker — Get Started", "Docker Docs", 1]]],
+  ["viz", 2, 2, "da ds", "Data visualisation", "Choosing the right chart, matplotlib/seaborn, design for clarity.", "التصوير المرئي للبيانات", "اختيار الرسم المناسب و matplotlib/seaborn والتصميم الواضح.", [["Data Visualization", "Kaggle Learn", 1], ["Storytelling with Data (book)", "Cole Nussbaumer Knaflic", 0]]],
+  ["bi", 2, 4, "da", "BI tools: Power BI / Tableau", "Data models, DAX, interactive dashboards, publishing and sharing.", "أدوات ذكاء الأعمال: Power BI / Tableau", "نماذج البيانات و DAX ولوحات تفاعلية والنشر والمشاركة.", [["PL-300: Power BI Data Analyst path", "Microsoft Learn", 1]]],
+  ["math", 2, 6, "ds", "Maths for ML", "Linear algebra, calculus and probability needed for machine learning.", "الرياضيات لتعلّم الآلة", "الجبر الخطي والتفاضل والاحتمالات اللازمة لتعلّم الآلة.", [["Mathematics for Machine Learning", "Imperial College, Coursera", 0]]],
+  ["sysadmin", 2, 4, "devops", "Linux administration", "systemd, users, packages, logs, storage, web servers (Nginx).", "إدارة أنظمة Linux", "systemd والمستخدمون والحزم والسجلات والتخزين وخوادم الويب (Nginx).", [["Linux System Administration Essentials (LFS207)", "Linux Foundation", 0]]],
+  ["testing", 3, 2, "de ds devops", "Testing & code quality", "pytest, linting, type hints, code review habits.", "الاختبارات وجودة الكود", "pytest وفحص الكود والتلميحات النوعية وعادات مراجعة الكود.", [["Python Testing with pytest (book)", "Brian Okken", 0]]],
+  ["cicd", 3, 3, "de devops", "CI/CD pipelines", "GitHub Actions / GitLab CI: build, test and deploy on every push.", "خطوط CI/CD", "GitHub Actions / GitLab CI: البناء والاختبار والنشر مع كل دفع.", [["GitHub Actions", "GitHub Skills", 1]]],
+  ["iac", 3, 4, "de devops", "Infrastructure as Code (Terraform)", "Providers, state, modules, plan/apply, environments.", "البنية كرمز (Terraform)", "المزوّدون والحالة والوحدات و plan/apply والبيئات.", [["Terraform tutorials", "HashiCorp Developer", 1], ["HashiCorp Terraform Associate", "HashiCorp", 0]]],
+  ["dbt", 3, 4, "da de", "Transformations with dbt", "Models, tests, documentation, sources, incremental models.", "التحويلات باستخدام dbt", "النماذج والاختبارات والتوثيق والمصادر والنماذج التزايدية.", [["dbt Fundamentals", "dbt Labs", 1]]],
+  ["airflow", 3, 3, "de", "Orchestration (Airflow)", "DAGs, scheduling, retries, backfills, sensors.", "جدولة المهام (Airflow)", "DAGs والجدولة وإعادة المحاولة والتعبئة الخلفية والمستشعرات.", [["Data Engineering Zoomcamp", "DataTalksClub", 1]]],
+  ["spark", 3, 4, "de ds", "Spark & distributed processing", "DataFrames, partitions, joins at scale, PySpark.", "Spark والمعالجة الموزّعة", "DataFrames والتقسيم والربط على نطاق واسع و PySpark.", [["Databricks Data Engineer Associate prep", "Databricks Academy", 0]]],
+  ["stream", 3, 3, "de", "Kafka & streaming", "Topics, producers/consumers, stream processing, exactly-once basics.", "Kafka والبث المباشر", "المواضيع والمنتجون والمستهلكون ومعالجة البث وأساسيات exactly-once.", [["Apache Kafka 101", "Confluent Developer", 1]]],
+  ["ml", 3, 8, "ds", "Machine learning", "Regression, classification, trees & boosting, clustering, evaluation, scikit-learn.", "تعلّم الآلة", "الانحدار والتصنيف والأشجار و Boosting والتجميع والتقييم و scikit-learn.", [["Machine Learning Specialization (Andrew Ng)", "DeepLearning.AI, Coursera", 0], ["Intro & Intermediate ML", "Kaggle Learn", 1]]],
+  ["ab", 3, 3, "da ds", "Experimentation & A/B testing", "Hypothesis tests, sample size, metrics, pitfalls, basic causal thinking.", "التجارب واختبارات A/B", "اختبار الفرضيات وحجم العيّنة والمقاييس والأخطاء الشائعة وأساسيات التفكير السببي.", [["A/B Testing by Google", "Udacity", 1]]],
+  ["story", 3, 2, "da ds", "Storytelling & stakeholders", "Framing questions, writing insights, presenting recommendations.", "سرد القصص وأصحاب القرار", "صياغة الأسئلة وكتابة الرؤى وعرض التوصيات.", [["Storytelling with Data (book)", "Cole Nussbaumer Knaflic", 0]]],
+  ["k8s", 3, 6, "de devops", "Kubernetes", "Pods, deployments, services, ingress, Helm, autoscaling.", "Kubernetes", "Pods و Deployments و Services و Ingress و Helm والتوسّع التلقائي.", [["Kubernetes for the Absolute Beginners", "KodeKloud", 0], ["Certified Kubernetes Administrator (CKA)", "Linux Foundation", 0]]],
+  ["monitor", 3, 3, "de devops", "Monitoring & observability", "Metrics, logs, alerts, Prometheus, Grafana, SLOs.", "المراقبة وقابلية الملاحظة", "المقاييس والسجلات والتنبيهات و Prometheus و Grafana و SLOs.", [["Prometheus & Grafana tutorials", "Grafana Labs", 1]]],
+  ["sec", 3, 3, "de devops", "Security & IAM", "Least privilege, secrets management, encryption, network security.", "الأمن والصلاحيات", "أقل الصلاحيات وإدارة الأسرار والتشفير وأمن الشبكات.", [["AWS Security Fundamentals", "AWS Skill Builder", 1]]],
+  ["lake", 4, 4, "de", "Warehouses & lakehouses", "Snowflake / BigQuery / Databricks, Delta & Iceberg tables, cost control.", "المستودعات وبيوت البحيرات", "Snowflake / BigQuery / Databricks وجداول Delta و Iceberg وضبط التكلفة.", [["SnowPro Core prep", "Snowflake", 0]]],
+  ["gov", 4, 3, "da de", "Data quality & governance", "Data contracts, lineage, catalogs, metric definitions, privacy.", "جودة البيانات وحوكمتها", "عقود البيانات ومسارها والكتالوجات وتعريف المقاييس والخصوصية.", [["Great Expectations / dbt tests docs", "Docs", 1]]],
+  ["domain", 4, 3, "da ds", "Business & product analytics", "Funnels, cohorts, retention, unit economics, domain knowledge.", "تحليلات الأعمال والمنتج", "مسارات التحويل والشرائح والاحتفاظ واقتصاديات الوحدة وفهم المجال.", [["Lean Analytics (book)", "Croll & Yoskovitz", 0]]],
+  ["dl", 4, 8, "ds", "Deep learning & LLMs", "Neural networks, PyTorch, transformers, fine-tuning, RAG, LLM evaluation.", "التعلّم العميق والنماذج اللغوية", "الشبكات العصبية و PyTorch و Transformers والضبط الدقيق و RAG وتقييم النماذج اللغوية.", [["Practical Deep Learning for Coders", "fast.ai", 1], ["LLM Course", "Hugging Face", 1]]],
+  ["mlops", 4, 4, "ds devops", "MLOps", "MLflow, model registry, serving behind an API, drift monitoring.", "MLOps", "MLflow وسجل النماذج وتقديم النماذج عبر API ومراقبة الانحراف.", [["MLOps Zoomcamp", "DataTalksClub", 1]]],
+  ["ansible", 4, 2, "devops", "Configuration management (Ansible)", "Playbooks, inventories, roles, idempotent server setup.", "إدارة الإعدادات (Ansible)", "Playbooks والمخزون والأدوار وإعداد الخوادم بشكل متكرر وآمن.", [["Ansible for the Absolute Beginner", "KodeKloud", 0]]],
+  ["sre", 4, 4, "devops", "SRE & GitOps", "Incident response, error budgets, Argo CD, platform engineering.", "SRE و GitOps", "الاستجابة للحوادث وميزانيات الخطأ و Argo CD وهندسة المنصات.", [["Site Reliability Engineering (book)", "Google (free online)", 1], ["GitOps Fundamentals with Argo", "Codefresh", 1]]]
+];
+const PP_PROJ = {
+  "da-de": ["Analytics platform: ingest data with a pipeline, model it in dbt, test it, and build a Power BI dashboard on top.", "منصة تحليلات: استيعاب البيانات بخط بيانات، ونمذجتها في dbt، واختبارها، ثم بناء لوحة Power BI فوقها."],
+  "da-ds": ["Churn study: SQL + pandas analysis, an A/B test design, a simple prediction model, and a recommendation deck.", "دراسة التسرّب: تحليل بـ SQL و pandas، وتصميم اختبار A/B، ونموذج تنبّؤ بسيط، وعرض توصيات."],
+  "da-devops": ["Self-hosted dashboard: a Python app that reports KPIs, containerised and deployed to the cloud with CI/CD.", "لوحة مستضافة ذاتيًا: تطبيق Python يعرض المؤشرات، داخل حاوية، ومنشور على السحابة عبر CI/CD."],
+  "de-ds": ["Feature pipeline: Spark job builds features into a warehouse; a model trains on them on a schedule.", "خط خصائص: مهمة Spark تبني الخصائص في مستودع؛ ونموذج يتدرّب عليها بشكل مجدول."],
+  "de-devops": ["Pipeline as a product: Airflow + Docker on Kubernetes, provisioned with Terraform, tested and deployed by CI/CD, with Grafana alerts.", "خط بيانات كمنتج: Airflow و Docker على Kubernetes، مُجهّز بـ Terraform، يُختبر ويُنشر عبر CI/CD، مع تنبيهات Grafana."],
+  "ds-devops": ["Model in production: containerised model API with tests, CI/CD, cloud deployment and drift monitoring.", "نموذج في الإنتاج: واجهة API للنموذج داخل حاوية مع اختبارات و CI/CD ونشر سحابي ومراقبة الانحراف."]
+};
+const PP_UI = AR_ON ? {
+  title: "🔀 مسار مسارين — اختر مسارين واحصل على الطريق المشترك وفرع كل منهما",
+  sub: "اختر مسارين. يُبنى لك الطريق المشترك أولًا (كل وحدة يحتاجها الاثنان)، ثم يتفرّع إلى طريق خاص بكل مسار. ضع علامة على ما تعرفه مسبقًا لتنقص المدة.",
+  pickA: "المسار الأول", pickB: "المسار الثاني", same: "اختر مسارين مختلفين.",
+  overlap: "تشابه المهارات", shared: "الطريق المشترك", branchOf: "فرع", stage: "المرحلة", weeks: "أسبوع", months: "شهر تقريبًا",
+  know: "أعرفها مسبقًا", courses: "الدورات", free: "مجاني", paid: "مدفوع",
+  sumShared: "الطريق المشترك", sumA: "لتصبح", sumBoth: "الاثنان معًا", sumSave: "توفير مقارنة بتعلّم كلٍّ منهما منفصلًا",
+  proj: "🛠 مشروع مشترك يجمع المسارين", projB: "🛠 مشروع الفرع", cert: "🏅 الشهادة", jobs: "💼 المسمّيات",
+  fork: "⑂ نقطة التفرّع — اختر فرعك أو ادرس الاثنين", order: "الترتيب المقترح",
+  orderTxt: (a, b) => `ابدأ بالطريق المشترك، ثم فرع ${a} لتحصل على أول وظيفة، ثم أكمل فرع ${b} أثناء العمل.`,
+  stageNames: ["", "الأساسيات", "الجوهر", "المتقدّم", "التخصّص"],
+  note: "المدد تقديرية بافتراض 10–12 ساعة أسبوعيًا. تُحفظ علامات «أعرفها مسبقًا» في متصفحك وتنطبق على كل الأزواج."
+} : {
+  title: "🔀 Two-career path — pick two, get the shared road and each branch",
+  sub: "Choose two careers. You get the shared road first (every module both need), then it forks into a branch for each. Tick what you already know to shorten the timeline.",
+  pickA: "First career", pickB: "Second career", same: "Pick two different careers.",
+  overlap: "Skill overlap", shared: "Shared road", branchOf: "Branch:", stage: "Stage", weeks: "wks", months: "months approx.",
+  know: "I know this", courses: "Courses", free: "Free", paid: "Paid",
+  sumShared: "Shared road", sumA: "To become", sumBoth: "Both careers", sumSave: "saved vs learning each separately",
+  proj: "🛠 Shared capstone that combines both", projB: "🛠 Branch capstone", cert: "🏅 Certification", jobs: "💼 Job titles",
+  fork: "⑂ The fork — choose your branch, or study both", order: "Suggested order",
+  orderTxt: (a, b) => `Do the shared road, then the ${a} branch to land a first job, then complete the ${b} branch on the job.`,
+  stageNames: ["", "Foundations", "Core", "Advanced", "Specialise"],
+  note: "Timings are estimates at about 10–12 hours a week. 'I know this' ticks are saved in your browser and apply to every pair."
+};
+[["ppTitle", "title"], ["ppSub", "sub"], ["ppNote", "note"]].forEach(([id, k]) => document.getElementById(id).innerHTML = PP_UI[k]);
+const ppName = m => AR_ON ? m[6] : m[4], ppDet = m => AR_ON ? m[7] : m[5];
+const ppHas = (m, k) => m[3].split(" ").includes(k);
+const ppKnown = m => store.get("pp-" + m[0]);
+const ppWeeks = list => list.filter(m => !ppKnown(m)).reduce((s, m) => s + m[2], 0);
+const ppMo = w => Math.max(0, Math.round(w / 4.3 * 2) / 2);
+
+const ppPick = document.getElementById("ppPick");
+const ppOpt = sel => LK.map(k => `<option value="${k}" ${k === sel ? "selected" : ""}>${LROLE(k).icon} ${LROLE(k).name}</option>`).join("");
+ppPick.innerHTML = `<label>${PP_UI.pickA}: <select id="ppA">${ppOpt("de")}</select></label> <b>＋</b> <label>${PP_UI.pickB}: <select id="ppB">${ppOpt("devops")}</select></label>`;
+
+function ppCard(m, a, b) {
+  const dots = [a, b].filter(k => ppHas(m, k)).map(k => `<i style="background:${LROLE(k).color}" title="${LROLE(k).name}"></i>`).join("");
+  return `<div class="pp-mod ${ppKnown(m) ? "known" : ""}">
+    <div class="pp-mh"><b>${ppName(m)}</b><span class="pp-w">${m[2]} ${PP_UI.weeks} <span class="dots">${dots}</span></span></div>
+    <div class="pp-d">${ppDet(m)}</div>
+    <div class="pp-c">${m[8].map(([n, p, f]) => `📚 ${n} <small>· ${p} · <span class="${f ? "free" : "paid"}">${f ? PP_UI.free : PP_UI.paid}</span></small>`).join("<br>")}</div>
+    <label class="pp-k"><input type="checkbox" data-id="${m[0]}" ${ppKnown(m) ? "checked" : ""}> ${PP_UI.know}</label></div>`;
+}
+function ppStages(list, a, b) {
+  return [1, 2, 3, 4].map(s => {
+    const ms = list.filter(m => m[1] === s);
+    return ms.length ? `<div class="pp-stage"><div class="lp-label">${PP_UI.stage} ${s} · ${PP_UI.stageNames[s]}</div>${ms.map(m => ppCard(m, a, b)).join("")}</div>` : "";
+  }).join("");
+}
+function showPP() {
+  const a = document.getElementById("ppA").value, b = document.getElementById("ppB").value, out = document.getElementById("ppOut");
+  if (a === b) { out.innerHTML = `<p class="sub">${PP_UI.same}</p>`; return; }
+  const A = LROLE(a), B = LROLE(b);
+  const shared = PP_MODS.filter(m => ppHas(m, a) && ppHas(m, b));
+  const onlyA = PP_MODS.filter(m => ppHas(m, a) && !ppHas(m, b));
+  const onlyB = PP_MODS.filter(m => ppHas(m, b) && !ppHas(m, a));
+  const uni = shared.length + onlyA.length + onlyB.length, ov = Math.round(shared.length / uni * 100);
+  const wS = ppWeeks(shared), wA = ppWeeks(onlyA), wB = ppWeeks(onlyB);
+  const saved = wS; // learning separately repeats the shared road
+  const key = [a, b].sort((x, y) => LK.indexOf(x) - LK.indexOf(y)).join("-");
+  const proj = PP_PROJ[key][AR_ON ? 1 : 0];
+  const first = wA <= wB ? a : b, second = first === a ? b : a;
+  const bar = (w, c, label) => w ? `<span style="flex:${w};background:${c}">${label} · ${ppMo(w)}</span>` : "";
+  const branchBox = (k, list, w) => { const r = LROLE(k), u = UP.branches[k];
+    return `<div class="pp-branch" style="--c:${r.color}"><div class="up-tag" style="background:${r.color};color:#111">${PP_UI.branchOf} ${r.icon} ${r.name} · ${w} ${PP_UI.weeks} ≈ ${ppMo(w)} ${PP_UI.months}</div>
+      ${ppStages(list, a, b)}
+      <div class="lp-label">${PP_UI.projB}</div><div class="lp-proj">${u.p}</div>
+      <div class="lp-label">${PP_UI.cert}</div><div>${u.cert}</div><div class="lp-label">${PP_UI.jobs}</div><div>${u.jobs}</div></div>`; };
+  out.innerHTML = `
+    <div class="pp-sum">
+      <div><small>${PP_UI.overlap}</small><b>${ov}%</b></div>
+      <div><small>${PP_UI.sumShared}</small><b>${ppMo(wS)}</b><small>${PP_UI.months}</small></div>
+      <div><small>${PP_UI.sumA} ${A.name}</small><b style="color:${A.color}">${ppMo(wS + wA)}</b><small>${PP_UI.months}</small></div>
+      <div><small>${PP_UI.sumA} ${B.name}</small><b style="color:${B.color}">${ppMo(wS + wB)}</b><small>${PP_UI.months}</small></div>
+      <div><small>${PP_UI.sumBoth}</small><b>${ppMo(wS + wA + wB)}</b><small>${PP_UI.months} · −${ppMo(saved)} ${PP_UI.sumSave}</small></div>
+    </div>
+    <div class="pp-bar">${bar(wS, "#8b93d6", PP_UI.shared)}${bar(wA, A.color, A.name)}${bar(wB, B.color, B.name)}</div>
+    <p><b>${PP_UI.order}:</b> ${PP_UI.orderTxt(LROLE(first).name, LROLE(second).name)}</p>
+    <div class="pp-shared"><div class="up-tag">${PP_UI.shared} · ${shared.length} · ${wS} ${PP_UI.weeks} ≈ ${ppMo(wS)} ${PP_UI.months}</div>
+      ${ppStages(shared, a, b)}
+      <div class="lp-label">${PP_UI.proj}</div><div class="lp-proj">${proj}</div></div>
+    <div class="up-arrow">⬇</div><div class="pp-fork">${PP_UI.fork}</div>
+    <div class="pp-cols">${branchBox(a, onlyA, wA)}${branchBox(b, onlyB, wB)}</div>`;
+  out.querySelectorAll(".pp-k input").forEach(i => i.onchange = () => { store.set("pp-" + i.dataset.id, i.checked); showPP(); });
+}
+ppPick.querySelectorAll("select").forEach(s => s.onchange = showPP);
+showPP();
 
 /* ---------- MYTHS ---------- */
 const MYTHS = AR_ON ? AR.MYTHS : [
